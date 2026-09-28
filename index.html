@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>MON MARIAGE — Toute votre journée. Au même endroit.</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      colors: {
+        noir: '#050506',
+        charbon: '#0B0B0D',
+        ivoire: '#F6F1E8',
+        ivoire2: '#FBF8F1',
+        gris: '#8A8A90',
+        fuchsiax: '#FF2E9A',
+      },
+      fontFamily: {
+        sans: ['"Inter Tight"', 'Inter', 'sans-serif'],
+        serif: ['"Instrument Serif"', 'serif'],
+      }
+    }
+  }
+}
+</script>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+<style>
+  *{ -webkit-tap-highlight-color: transparent; }
+  html{ background:#050506; scroll-behavior:smooth; }
+  body{ background:#050506; color:#F6F1E8; font-family:"Inter Tight",sans-serif; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
+  ::selection{ background:#FF2E9A; color:white; }
+  .grain::after{
+    content:""; position:fixed; inset:0; z-index:90; pointer-events:none; opacity:.07;
+    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .huge{ font-weight:800; letter-spacing:-0.06em; line-height:.88; }
+  .eyebrow{ font-size:11px; letter-spacing:.28em; text-transform:uppercase; font-weight:600; }
+  .serif-i{ font-family:"Instrument Serif",serif; font-style:italic; font-weight:400; letter-spacing:-0.02em; }
+  .glass{ backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); }
+  .line-glow{ box-shadow:0 0 20px rgba(255,46,154,.45), 0 0 60px rgba(255,46,154,.18); }
+  .timeline-track{ background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.22) 10%, rgba(255,255,255,.22) 90%, transparent 100%); height:1px; }
+  .dot{ width:7px; height:7px; border-radius:999px; background:#fff; box-shadow:0 0 12px rgba(255,255,255,.8); }
+  .dot-f{ background:#FF2E9A; box-shadow:0 0 14px rgba(255,46,154,.9), 0 0 40px rgba(255,46,154,.4); }
+  .card-dark{ background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); border:1px solid rgba(255,255,255,.1); }
+  .card-light{ background:#fff; border:1px solid rgba(0,0,0,.07); box-shadow:0 20px 60px -20px rgba(0,0,0,.18); }
+  .pill{ border:1px solid rgba(0,0,0,.1); }
+  .no-scrollbar::-webkit-scrollbar{display:none} .no-scrollbar{scrollbar-width:none}
+  .vignette{ border-radius:999px; border:3px solid #fff; box-shadow:0 10px 30px rgba(0,0,0,.18); object-fit:cover; }
+  input[type=range]{ -webkit-appearance:none; width:100%; background:transparent; }
+  input[type=range]::-webkit-slider-thumb{ -webkit-appearance:none; width:56px; height:56px; border-radius:999px; background:#fff; border:1px solid rgba(0,0,0,.1); box-shadow:0 10px 30px rgba(0,0,0,.4), 0 0 0 8px rgba(255,46,154,.12); cursor:grab; margin-top:-26px; position:relative; }
+  input[type=range]::-webkit-slider-runnable-track{ height:4px; border-radius:999px; background:linear-gradient(90deg, #fff 0%, #FF2E9A 60%, rgba(255,255,255,.2) 100%); }
+  input[type=range]::-moz-range-thumb{ width:56px; height:56px; border-radius:999px; background:#fff; border:none; box-shadow:0 10px 30px rgba(0,0,0,.4); cursor:grab; }
+  .switch{ width:64px; height:36px; border-radius:999px; background:rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.2); position:relative; transition:.4s; cursor:pointer; }
+  .switch.on{ background:#FF2E9A; border-color:#FF2E9A; }
+  .switch::after{ content:""; position:absolute; top:3px; left:3px; width:28px; height:28px; border-radius:999px; background:white; transition:.4s cubic-bezier(.34,1.56,.64,1); }
+  .switch.on::after{ left:31px; }
+  .phone{ width:310px; height:640px; border-radius:54px; background:#0a0a0c; border:1px solid rgba(255,255,255,.18); padding:12px; box-shadow:0 0 0 10px rgba(20,20,22,.9), 0 0 0 11px rgba(255,255,255,.12), 0 60px 120px -20px rgba(0,0,0,.8), 0 0 100px rgba(255,46,154,.12); position:relative; }
+  .phone-screen{ width:100%; height:100%; border-radius:44px; overflow:hidden; background:#F6F1E8; color:#111; position:relative; display:flex; flex-direction:column; }
+  .notch{ position:absolute; top:12px; left:50%; transform:translateX(-50%); width:110px; height:28px; background:#050506; border-radius:999px; z-index:20; }
+  .depth{ perspective:1400px; }
+  .depth-inner{ transform-style:preserve-3d; }
+  .d-card{ transform-style:preserve-3d; will-change:transform; }
+  .progress-side{ position:fixed; right:14px; top:50%; transform:translateY(-50%); z-index:60; display:flex; flex-direction:column; gap:10px; }
+  .progress-side span{ width:4px; height:22px; border-radius:999px; background:rgba(255,255,255,.15); transition:.4s; display:block; }
+  .progress-side span.active{ background:#FF2E9A; height:36px; box-shadow:0 0 12px rgba(255,46,154,.7); }
+  @media(max-width:768px){ .progress-side{display:none} }
+  .marquee{ display:flex; gap:3rem; animation:marq 28s linear infinite; white-space:nowrap; }
+  @keyframes marq{ to{ transform:translateX(-50%);} }
+  @keyframes pulse-live{ 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.5; transform:scale(.85);} }
+  .live-dot{ animation:pulse-live 1.6s ease-in-out infinite; }
+  @keyframes floaty{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-12px);} }
+  .floaty{ animation:floaty 6s ease-in-out infinite; }
+  .reveal{ opacity:0; transform:translateY(40px); }
+  .chapter-num{ font-family:"JetBrains Mono",monospace; font-size:11px; letter-spacing:.2em; }
+  .btn-fuchsia{ background:#FF2E9A; box-shadow:0 10px 40px -8px rgba(255,46,154,.6); transition:.3s; }
+  .btn-fuchsia:hover{ transform:translateY(-2px) scale(1.02); box-shadow:0 18px 50px -8px rgba(255,46,154,.7); }
+  .blur-bg{ filter:blur(6px) saturate(.8); opacity:.45; transform:scale(.98); transition:.8s; }
+  .focus-mode .blur-bg{ filter:blur(14px); opacity:.18; }
+  .focus-mode .focus-el{ border-color:rgba(255,46,154,.5)!important; box-shadow:0 0 0 1px rgba(255,46,154,.4), 0 20px 60px -10px rgba(255,46,154,.25); }
+  .tab-btn{ transition:.3s; }
+  .tab-btn.active{ background:#111; color:#fff; }
+  .link-underline{ position:relative; }
+  .link-underline::after{ content:""; position:absolute; left:0; bottom:-2px; height:1px; width:0; background:currentColor; transition:.3s; }
+  .link-underline:hover::after{ width:100%; }
+</style>
+</head>
+<body class="grain">
+
+<!-- PROGRESS TOP -->
+<div class="fixed top-0 left-0 h-[2px] bg-white/10 w-full z-[80]"><div id="topProgress" class="h-full bg-[#FF2E9A] w-0"></div></div>
+
+<!-- SIDE PROGRESS -->
+<div class="progress-side" id="sideDots"></div>
+
+<!-- NAV -->
+<nav id="nav" class="fixed top-0 left-0 w-full z-[70] transition-all duration-500">
+  <div class="max-w-[1400px] mx-auto px-5 md:px-10 pt-4 flex items-center justify-between">
+    <div class="glass bg-black/40 border border-white/10 rounded-full pl-4 pr-2 py-2 flex items-center gap-3">
+      <div class="w-2 h-2 rounded-full bg-[#FF2E9A] line-glow"></div>
+      <span class="text-[13px] font-800 font-extrabold tracking-[0.18em]">MON MARIAGE</span>
+      <span class="hidden md:inline text-[11px] text-white/50 border-l border-white/10 pl-3 ml-1">Orchestration</span>
+    </div>
+    <div class="hidden md:flex items-center gap-8 text-[13px] text-white/60">
+      <a href="#temps" class="link-underline hover:text-white">Temps</a>
+      <a href="#personnes" class="link-underline hover:text-white">Personnes</a>
+      <a href="#jourj" class="link-underline hover:text-white">Jour J</a>
+      <a href="#vision" class="link-underline hover:text-white">Vision</a>
+    </div>
+    <a href="#acces" class="glass bg-white text-black text-[13px] font-semibold rounded-full px-5 py-2.5 hover:bg-[#FF2E9A] hover:text-white transition-all">Accès anticipé</a>
+  </div>
+</nav>
+
+<!-- ================= HERO ================= -->
+<header id="hero" class="relative min-h-[100svh] flex flex-col justify-center items-center overflow-hidden bg-[#050506] px-6 pt-24 pb-10">
+  <div class="absolute inset-0 pointer-events-none">
+    <div id="orb1" class="absolute left-1/2 top-[38%] -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] md:w-[520px] md:h-[520px] rounded-full opacity-[0.16]" style="background:radial-gradient(circle, #FF2E9A 0%, transparent 65%)"></div>
+    <div class="absolute inset-0" style="background:radial-gradient(ellipse 80% 55% at 50% 38%, rgba(255,255,255,.07), transparent 70%)"></div>
+    <div class="absolute bottom-0 w-full h-[30vh]" style="background:linear-gradient(to top, #050506, transparent)"></div>
+  </div>
+
+  <p class="eyebrow text-white/50 mb-6 hero-fade">Nouvelle catégorie — Orchestration</p>
+  <h1 id="heroTitle" class="huge text-center text-[15vw] md:text-[9.5vw] leading-[.85]">MON<br class="md:hidden"> MARIAGE</h1>
+  <p class="serif-i text-[22px] md:text-[32px] text-ivoire/90 mt-5 text-center hero-fade">Toute votre journée. <span class="text-white/50">Au même endroit.</span></p>
+
+  <!-- TIMELINE MINIMALISTE -->
+  <div id="heroTimeline" class="w-full max-w-[760px] mt-14 md:mt-16 opacity-0">
+    <div class="flex justify-between text-[11px] tracking-[0.18em] text-white/45 font-medium mb-4 px-1">
+      <span>14:00</span><span>16:30</span><span>19:00</span><span>23:00</span>
+    </div>
+    <div class="relative px-1">
+      <div class="timeline-track w-full"></div>
+      <div id="heroLineFill" class="absolute top-0 left-1 h-[1px] bg-white origin-left scale-x-0" style="width:calc(100% - 8px)"></div>
+      <div class="absolute top-0 left-1 w-full flex justify-between -translate-y-[3px] pr-2">
+        <div class="hero-dot flex flex-col items-center"><div class="dot"></div></div>
+        <div class="hero-dot"><div class="dot"></div></div>
+        <div class="hero-dot"><div class="dot dot-f"></div></div>
+        <div class="hero-dot"><div class="dot"></div></div>
+      </div>
+    </div>
+    <div class="flex justify-between mt-4 text-[12px] md:text-[13px]">
+      <span class="text-white/70">Cérémonie</span>
+      <span class="text-white/40">Cocktail</span>
+      <span class="text-white font-semibold">Dîner <span class="ml-1 text-[10px] bg-[#FF2E9A]/15 text-[#FF7AB8] border border-[#FF2E9A]/30 rounded-full px-2 py-0.5">● en direct</span></span>
+      <span class="text-white/40">Danse</span>
+    </div>
+    <div class="mt-8 flex justify-center">
+      <div class="card-dark rounded-2xl px-5 py-3 flex items-center gap-4 glass">
+        <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-black text-[14px]">▶</div>
+        <div class="text-left"><p class="text-[13px] font-semibold leading-none">Voir la journée s'orchestrer</p><p class="text-[11px] text-white/50 mt-1">1:12 — sans aucun texte à lire</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="absolute bottom-6 flex flex-col items-center gap-2 text-white/35">
+    <span class="text-[10px] tracking-[0.3em] uppercase">Faites défiler</span>
+    <div class="w-[1px] h-10 bg-gradient-to-b from-white/40 to-transparent overflow-hidden"><div id="scrollHint" class="w-full h-1/2 bg-white"></div></div>
+  </div>
+</header>
+
+<!-- BANDEAU EDITORIAL -->
+<div class="bg-[#050506] border-y border-white/10 py-4 overflow-hidden">
+  <div class="marquee text-[12px] tracking-[0.25em] uppercase text-white/40 font-medium">
+    <span>Le mariage est complexe — L'interface ne doit pas l'être &nbsp; • &nbsp; 10 ans d'avance &nbsp; • &nbsp; Une seule timeline &nbsp; • &nbsp; Le mariage est complexe — L'interface ne doit pas l'être &nbsp; • &nbsp; 10 ans d'avance &nbsp; • &nbsp; Une seule timeline &nbsp; • &nbsp;</span>
+    <span>Le mariage est complexe — L'interface ne doit pas l'être &nbsp; • &nbsp; 10 ans d'avance &nbsp; • &nbsp; Une seule timeline &nbsp; • &nbsp; Le mariage est complexe — L'interface ne doit pas l'être &nbsp; • &nbsp; 10 ans d'avance &nbsp; • &nbsp; Une seule timeline &nbsp; • &nbsp;</span>
+  </div>
+</div>
+
+<!-- ================= SECTION 1 ================= -->
+<section id="temps" data-chapter="01 — Le temps" class="relative bg-[#050506] px-6 md:px-10 py-24 md:py-36 overflow-hidden">
+  <div class="max-w-[1100px] mx-auto">
+    <p class="chapter-num text-[#FF7AB8] mb-5 reveal">01 / TEMPS</p>
+    <h2 class="huge text-[13vw] md:text-[7.2vw] text-center reveal">Tout commence<br><span class="serif-i font-normal">par le temps.</span></h2>
+    <p class="text-center text-white/50 mt-6 text-[15px] md:text-lg reveal">Un seul fil. Du matin au bout de la nuit.</p>
+
+    <div id="immenseTimeline" class="mt-14 md:mt-20 relative rounded-[28px] border border-white/10 bg-gradient-to-b from-white/[0.06] to-transparent p-2 md:p-4 overflow-hidden">
+      <div class="absolute left-[52px] md:left-[120px] top-8 bottom-8 w-[1px] bg-white/10"><div id="s1Progress" class="w-full bg-gradient-to-b from-white to-[#FF2E9A] origin-top" style="height:0%"></div></div>
+      <div id="s1List" class="relative flex flex-col">
+        <!-- rows injected by JS -->
+      </div>
+      <div class="flex items-center justify-between px-5 md:px-8 py-4 border-t border-white/10 text-[12px] text-white/40">
+        <span>● 6 moments · 11h42 de journée</span><span class="hidden md:inline">Glissez pour explorer</span><span class="text-white/70">Durée totale auto-calculée</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECTION 2 ================= -->
+<section id="personnes" data-chapter="02 — Les personnes" class="bg-ivoire text-[#111] px-6 md:px-10 py-24 md:py-36 rounded-t-[32px] md:rounded-t-[48px] relative overflow-hidden">
+  <div class="max-w-[1100px] mx-auto">
+    <p class="chapter-num text-[#111]/50 mb-5 reveal">02 / HUMAIN</p>
+    <h2 class="huge text-[11vw] md:text-[6.2vw] text-center reveal">Et autour de chaque<br>moment, <span class="serif-i font-normal">les bonnes personnes.</span></h2>
+    <p class="text-center text-black/50 mt-6 reveal">Pas des listes. Des visages, au bon endroit.</p>
+
+    <div class="mt-12 grid md:grid-cols-3 gap-4 md:gap-6">
+      <div class="card-light rounded-[24px] p-6 reveal s2-card">
+        <div class="flex -space-x-4">
+          <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop" class="vignette w-14 h-14" alt="">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&auto=format&fit=crop" class="vignette w-14 h-14" alt="">
+          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop" class="vignette w-14 h-14" alt="">
+          <div class="w-14 h-14 rounded-full bg-[#111] text-white text-[12px] font-bold flex items-center justify-center border-[3px] border-white">+12</div>
+        </div>
+        <p class="text-[11px] tracking-[0.2em] uppercase text-black/40 mt-6 font-semibold">16:30 — Cocktail</p>
+        <h3 class="text-[22px] font-extrabold tracking-tight mt-1">Tout le monde sait<br>où aller.</h3>
+        <div class="mt-4 flex gap-2 text-[12px]"><span class="bg-ivoire border pill rounded-full px-3 py-1.5">Serveurs ×6</span><span class="bg-ivoire border pill rounded-full px-3 py-1.5">Musiciens ×3</span></div>
+      </div>
+      <div class="card-light rounded-[24px] overflow-hidden reveal s2-card md:-translate-y-4">
+        <img src="https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=800&auto=format&fit=crop" class="w-full h-56 object-cover" alt="">
+        <div class="p-6">
+          <div class="flex -space-x-3 -mt-12 mb-3">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=200&auto=format&fit=crop" class="vignette w-12 h-12" alt="">
+            <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=200&auto=format&fit=crop" class="vignette w-12 h-12" alt="">
+            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=200&auto=format&fit=crop" class="vignette w-12 h-12" alt="">
+          </div>
+          <p class="text-[11px] tracking-[0.2em] uppercase text-black/40 font-semibold">14:00 — Cérémonie</p>
+          <h3 class="text-[22px] font-extrabold tracking-tight">Les proches d'abord,<br>sans y penser.</h3>
+        </div>
+      </div>
+      <div class="card-light rounded-[24px] p-6 reveal s2-card">
+        <div class="flex items-center gap-3">
+          <img src="https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=200&auto=format&fit=crop" class="vignette w-14 h-14" alt="">
+          <div><p class="font-bold text-[15px] leading-none">Camille & Jules</p><p class="text-[12px] text-black/50 mt-1">Mariés · voient l'essentiel</p></div>
+          <div class="ml-auto w-2.5 h-2.5 rounded-full bg-green-500"></div>
+        </div>
+        <div class="mt-5 bg-ivoire rounded-2xl p-4 border border-black/5">
+          <p class="text-[13px]">“On n'a appelé personne.<br>Tout le monde savait déjà.”</p>
+        </div>
+        <div class="mt-4 flex -space-x-3">
+          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=200&auto=format&fit=crop" class="vignette w-10 h-10 !border-ivoire" alt="">
+          <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop" class="vignette w-10 h-10 !border-ivoire" alt="">
+          <img src="https://images.unsplash.com/photo-1463453091185-61582044d556?q=80&w=200&auto=format&fit=crop" class="vignette w-10 h-10 !border-ivoire" alt="">
+          <img src="https://images.unsplash.com/photo-1547425260-76bcadfb4f2c?q=80&w=200&auto=format&fit=crop" class="vignette w-10 h-10 !border-ivoire" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECTION 3 ================= -->
+<section id="deplacer" data-chapter="03 — Déplacer" class="bg-noir px-6 md:px-10 py-24 md:py-36 relative overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(60% 40% at 50% 20%, rgba(255,46,154,.08), transparent 70%)"></div>
+  <div class="max-w-[1000px] mx-auto relative">
+    <p class="chapter-num text-[#FF7AB8] mb-5 text-center reveal">03 / GESTE</p>
+    <h2 class="huge text-[13vw] md:text-[6.5vw] text-center reveal">Déplacez <span class="serif-i font-normal">un moment.</span></h2>
+    <p class="text-center text-white/50 mt-5 reveal">Tout le reste suit. Essayez — touchez, glissez.</p>
+
+    <div class="mt-12 card-dark rounded-[28px] p-6 md:p-10 glass reveal">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-[12px] tracking-[0.2em] uppercase text-white/50 font-semibold">Démo interactive</span>
+        <span id="cascadeBadge" class="text-[12px] bg-[#FF2E9A]/15 border border-[#FF2E9A]/40 text-[#FF8AC2] rounded-full px-3 py-1 opacity-0 transition-all">✦ cascade intelligente</span>
+      </div>
+      <!-- Big draggable visual -->
+      <div class="text-center py-6">
+        <p class="eyebrow text-white/40">Cérémonie</p>
+        <p id="dragTimeBig" class="huge text-[22vw] md:text-[9vw] tabular-nums">15:30</p>
+        <p id="dragHint" class="text-[13px] text-white/40">Glissez le curseur — le reste se recalcule seul</p>
+      </div>
+      <div class="relative pt-2 pb-1 px-1">
+        <input id="timeSlider" type="range" min="840" max="1020" value="930" step="5">
+        <div class="flex justify-between text-[11px] text-white/35 mt-2 font-mono"><span>14:00</span><span>15:30</span><span>17:00</span></div>
+      </div>
+      <div class="grid grid-cols-3 gap-3 mt-6">
+        <div class="rounded-2xl bg-white/[0.06] border border-white/10 p-4 text-center"><p class="text-[11px] uppercase tracking-[0.18em] text-white/40">Cocktail</p><p id="tCocktail" class="text-[20px] font-extrabold tabular-nums mt-1">16:45</p><p class="text-[11px] text-[#FF8AC2] mt-1">auto +75 min</p></div>
+        <div class="rounded-2xl bg-white/[0.06] border border-white/10 p-4 text-center"><p class="text-[11px] uppercase tracking-[0.18em] text-white/40">Dîner</p><p id="tDiner" class="text-[20px] font-extrabold tabular-nums mt-1">18:30</p><p class="text-[11px] text-[#FF8AC2] mt-1">auto +180 min</p></div>
+        <div class="rounded-2xl bg-white/[0.06] border border-white/10 p-4 text-center"><p class="text-[11px] uppercase tracking-[0.18em] text-white/40">Prestataires</p><p id="tPrest" class="text-[20px] font-extrabold tabular-nums mt-1">8 notifiés</p><p class="text-[11px] text-emerald-300 mt-1">● synchronisés</p></div>
+      </div>
+      <div class="flex gap-3 mt-6">
+        <button id="btnMinus" class="flex-1 rounded-full border border-white/15 py-3 text-[14px] font-semibold active:scale-95 transition">− 15 min</button>
+        <button id="btnPlus" class="flex-1 rounded-full bg-white text-black py-3 text-[14px] font-semibold active:scale-95 transition">+ 15 min →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECTION 4 ================= -->
+<section id="savoir" data-chapter="04 — L'essentiel" class="bg-charbon px-6 md:px-10 py-24 md:py-36 border-y border-white/10 overflow-hidden">
+  <div class="max-w-[1100px] mx-auto">
+    <p class="chapter-num text-white/40 mb-5 text-center reveal">04 / CLARTÉ</p>
+    <h2 class="huge text-[11vw] md:text-[6vw] text-center reveal">Vous n'avez pas<br>besoin de <span class="serif-i font-normal">tout savoir.</span></h2>
+    <div class="flex justify-center mt-8 reveal">
+      <div class="flex items-center gap-4 glass bg-white/5 border border-white/10 rounded-full pl-5 pr-2 py-2">
+        <span class="text-[13px] text-white/60">127 détails gérés</span>
+        <div id="focusSwitch" class="switch on"></div>
+        <span class="text-[13px] font-semibold bg-white text-black rounded-full px-4 py-2">Voir l'essentiel</span>
+      </div>
+    </div>
+
+    <div id="focusZone" class="focus-mode mt-12 relative rounded-[28px] border border-white/10 bg-black/40 p-4 md:p-8 overflow-hidden">
+      <div class="grid md:grid-cols-2 gap-3 relative z-10">
+        <div class="focus-el rounded-2xl bg-[#0F0F12] border border-white/10 p-5 flex gap-4 items-center transition-all duration-700">
+          <div class="w-12 h-12 rounded-2xl bg-white text-black font-extrabold flex items-center justify-center text-[14px]">14h</div>
+          <div><p class="font-bold">Cérémonie — Jardin</p><p class="text-[13px] text-white/50">180 invités assis · 45 min</p></div>
+          <span class="ml-auto text-[11px] text-[#FF8AC2] border border-[#FF2E9A]/30 rounded-full px-2 py-1">MAINTENANT</span>
+        </div>
+        <div class="focus-el rounded-2xl bg-[#0F0F12] border border-white/10 p-5 flex gap-4 items-center transition-all duration-700">
+          <div class="w-12 h-12 rounded-2xl bg-white/10 font-extrabold flex items-center justify-center text-[14px]">16h</div>
+          <div><p class="font-bold">Cocktail — Terrasse</p><p class="text-[13px] text-white/50">Traiteur + quartet</p></div>
+        </div>
+        <div class="blur-bg rounded-2xl bg-white/[0.04] border border-white/10 p-4 text-[13px] text-white/60">✓ Nappes ivoire ×22 — validé traiteur</div>
+        <div class="blur-bg rounded-2xl bg-white/[0.04] border border-white/10 p-4 text-[13px] text-white/60">✓ Micros HF — test son 13:00</div>
+        <div class="blur-bg rounded-2xl bg-white/[0.04] border border-white/10 p-4 text-[13px] text-white/60">✓ Plan B pluie — barnum côté ouest</div>
+        <div class="blur-bg rounded-2xl bg-white/[0.04] border border-white/10 p-4 text-[13px] text-white/60">✓ Navettes invités — 2 bus 23:30</div>
+        <div class="blur-bg rounded-2xl bg-white/[0.04] border border-white/10 p-4 text-[13px] text-white/60">✓ Allergies table 7 — sans gluten</div>
+        <div class="blur-bg rounded-2xl bg-white/[0.04] border border-white/10 p-4 text-[13px] text-white/60">✓ + 119 autres détails absorbés</div>
+      </div>
+      <p class="text-center text-[12px] text-white/35 mt-6 relative z-10">Touchez l'interrupteur : le bruit disparaît, l'important reste.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECTION 5 ================= -->
+<section id="equipe" data-chapter="05 — Ensemble" class="bg-ivoire text-[#111] px-6 md:px-10 py-24 md:py-36">
+  <div class="max-w-[1000px] mx-auto">
+    <p class="chapter-num text-black/40 mb-5 text-center reveal">05 / ENSEMBLE</p>
+    <h2 class="huge text-[11vw] md:text-[5.8vw] text-center reveal">Tout le monde travaille<br>sur <span class="serif-i font-normal">le même mariage.</span></h2>
+    <p class="text-center text-black/50 mt-5 reveal">Pas cinq versions. Une seule, vivante.</p>
+    <div id="providerStack" class="mt-12 flex flex-col gap-3 max-w-[620px] mx-auto"></div>
+    <div class="text-center mt-8 reveal"><span class="inline-flex items-center gap-2 text-[13px] bg-[#111] text-white rounded-full px-5 py-2.5"><span class="w-2 h-2 rounded-full bg-green-400 live-dot"></span> 8 prestataires synchronisés à l'instant</span></div>
+  </div>
+</section>
+
+<!-- ================= SECTION 6 ================= -->
+<section id="info" data-chapter="06 — Propagation" class="bg-noir px-6 md:px-10 py-24 md:py-36 relative overflow-hidden">
+  <div class="max-w-[1100px] mx-auto">
+    <p class="chapter-num text-[#FF7AB8] mb-5 text-center reveal">06 / PROPAGATION</p>
+    <h2 class="huge text-[11vw] md:text-[5.8vw] text-center reveal">Une information.<br><span class="serif-i font-normal text-white/70">Partout où elle compte.</span></h2>
+
+    <div class="mt-12 grid md:grid-cols-[1.1fr_.9fr] gap-4 items-stretch">
+      <div class="card-dark rounded-[24px] p-7 md:p-9 reveal">
+        <p class="eyebrow text-white/40">Source — vous modifiez</p>
+        <div class="mt-4 bg-white rounded-2xl text-black p-5 flex items-center justify-between">
+          <div><p class="text-[12px] uppercase tracking-[0.18em] text-black/50 font-bold">Dîner</p><p id="srcInfo" class="text-[26px] font-extrabold tracking-tight">19:00 · Terrasse Est</p></div>
+          <div class="w-12 h-12 rounded-full bg-black text-white flex items-center justify-center">✎</div>
+        </div>
+        <button id="btnPropagate" class="mt-5 w-full btn-fuchsia text-white font-semibold rounded-full py-4 text-[15px]">Déplacer à 19:30 · Terrasse Ouest ↺</button>
+        <p class="text-[12px] text-white/40 mt-3 text-center">Touchez pour voir l'information voyager.</p>
+      </div>
+      <div class="flex flex-col gap-3">
+        <div id="mir1" class="card-dark rounded-[20px] p-5 flex items-center gap-4 reveal"><div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">◷</div><div><p class="text-[12px] text-white/50 uppercase tracking-widest">Timeline</p><p class="mirror-text font-bold">Dîner → 19:00</p></div><span class="ml-auto text-[11px] text-emerald-300">✓ à jour</span></div>
+        <div id="mir2" class="card-dark rounded-[20px] p-5 flex items-center gap-4 reveal"><div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">◧</div><div><p class="text-[12px] text-white/50 uppercase tracking-widest">Plan de salle</p><p class="mirror-text font-bold">22 tables · Est</p></div><span class="ml-auto text-[11px] text-emerald-300">✓ à jour</span></div>
+        <div id="mir3" class="card-dark rounded-[20px] p-5 flex items-center gap-4 reveal"><div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">✉</div><div><p class="text-[12px] text-white/50 uppercase tracking-widest">Message invités</p><p class="mirror-text font-bold">“Rendez-vous Terrasse Est”</p></div><span class="ml-auto text-[11px] text-emerald-300">✓ à jour</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECTION 7 ================= -->
+<section id="jourj" data-chapter="07 — Jour J" class="bg-ivoire2 text-[#111] px-6 md:px-10 py-24 md:py-36 rounded-[32px] md:rounded-[48px] mx-2 md:mx-4">
+  <div class="max-w-[1050px] mx-auto">
+    <p class="chapter-num text-black/40 mb-5 text-center reveal">07 / JOUR RÉEL</p>
+    <h2 class="huge text-[12vw] md:text-[6vw] text-center reveal">Et le jour venu,<br><span class="serif-i font-normal">tout est déjà là.</span></h2>
+    <p class="text-center text-black/50 mt-5 reveal">La timeline devient la journée.</p>
+
+    <div id="dayCard" class="mt-12 card-light rounded-[28px] overflow-hidden reveal">
+      <div class="grid md:grid-cols-2">
+        <div class="p-8 md:p-10 bg-[#111] text-white relative overflow-hidden">
+          <div class="flex items-center gap-2"><span class="w-2.5 h-2.5 rounded-full bg-[#FF2E9A] live-dot"></span><span class="text-[11px] tracking-[0.25em] font-bold">EN DIRECT — 16:32</span><span class="ml-auto text-[12px] text-white/50">☀ 24° · vent nul</span></div>
+          <p class="huge text-[18vw] md:text-[5.2vw] mt-6 tabular-nums" id="liveClock">16:32</p>
+          <p class="serif-i text-[20px] text-white/70">Cocktail · Terrasse Ouest</p>
+          <div class="mt-6 h-2 rounded-full bg-white/10 overflow-hidden"><div id="dayProgress" class="h-full w-[62%] bg-gradient-to-r from-white to-[#FF2E9A] rounded-full"></div></div>
+          <div class="flex justify-between text-[11px] text-white/40 mt-2"><span>14:00 début</span><span>62% de la journée</span><span>00:00 fin</span></div>
+          <div class="mt-6 flex gap-3">
+            <div class="flex-1 bg-white/[0.07] border border-white/10 rounded-2xl p-4"><p class="text-[11px] text-white/50 uppercase tracking-widest">Ensuite</p><p class="font-bold mt-1">17:45 — Photos dorées</p></div>
+            <div class="flex-1 bg-[#FF2E9A] rounded-2xl p-4"><p class="text-[11px] text-white/80 uppercase tracking-widest">Action</p><p class="font-bold mt-1">Lancer le cortège →</p></div>
+          </div>
+        </div>
+        <div class="relative min-h-[320px]">
+          <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=1000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover" alt="">
+          <div class="absolute inset-0" style="background:linear-gradient(to top, rgba(0,0,0,.55), transparent 60%)"></div>
+          <div class="absolute bottom-5 left-5 right-5 flex items-end justify-between text-white">
+            <div><p class="text-[11px] tracking-[0.25em] uppercase opacity-80">Lieu réel · synchronisé</p><p class="text-[20px] font-extrabold">Château de Chanilly — Ouest</p></div>
+            <div class="bg-white/20 glass border border-white/30 rounded-full px-4 py-2 text-[12px] font-semibold">Plan live ●</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECTION 8 ================= -->
+<section id="regard" data-chapter="08 — Regard" class="bg-noir px-6 md:px-10 py-24 md:py-36 overflow-hidden">
+  <div class="max-w-[1100px] mx-auto grid md:grid-cols-2 gap-12 items-center">
+    <div>
+      <p class="chapter-num text-[#FF7AB8] mb-5 reveal">08 / ÉVIDENCE</p>
+      <h2 class="huge text-[14vw] md:text-[5.5vw] reveal">Simple<br>comme <span class="serif-i font-normal">un regard.</span></h2>
+      <p class="text-white/50 mt-6 text-[16px] leading-relaxed reveal">Deux gestes pour tout voir.<br>Lisible en plein soleil. Rassurant à 2h du matin.</p>
+      <div class="mt-8 flex gap-8 reveal">
+        <div><p class="huge text-[40px] tabular-nums">2</p><p class="text-[12px] text-white/40 uppercase tracking-widest">gestes suffisent</p></div>
+        <div><p class="huge text-[40px] tabular-nums">0</p><p class="text-[12px] text-white/40 uppercase tracking-widest">mode d'emploi</p></div>
+        <div><p class="huge text-[40px] text-[#FF7AB8]">✦</p><p class="text-[12px] text-white/40 uppercase tracking-widest">toujours net</p></div>
+      </div>
+      <div class="mt-8 flex gap-2 reveal">
+        <button class="tab-btn active rounded-full border border-white/15 px-5 py-2.5 text-[13px] font-semibold" data-tab="0">Timeline</button>
+        <button class="tab-btn rounded-full border border-white/15 px-5 py-2.5 text-[13px] font-semibold text-white/60" data-tab="1">Invités</button>
+        <button class="tab-btn rounded-full border border-white/15 px-5 py-2.5 text-[13px] font-semibold text-white/60" data-tab="2">Jour J</button>
+      </div>
+    </div>
+    <div class="flex justify-center reveal">
+      <div class="phone floaty" id="phone">
+        <div class="phone-screen">
+          <div class="notch"></div>
+          <div class="pt-12 px-5 pb-3 flex items-center justify-between">
+            <p class="text-[11px] font-mono">16:32</p><p class="text-[11px] font-extrabold tracking-[0.18em]">MON MARIAGE</p><p class="text-[11px]">●●●</p>
+          </div>
+          <div id="phoneContent" class="flex-1 px-4 pb-4 overflow-hidden"></div>
+          <div class="px-5 pb-6 pt-2 flex justify-between text-[20px] bg-white/60 glass border-t border-black/5">
+            <span>◷</span><span class="opacity-30">◍</span><span class="opacity-30">☺</span><span class="opacity-30">⚙</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SECTION 9 ================= -->
+<section id="vision" data-chapter="09 — Espace" class="bg-[#08080A] px-6 md:px-10 py-24 md:py-36 border-t border-white/10 overflow-hidden relative">
+  <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(70% 50% at 50% 60%, rgba(255,46,154,.09), transparent 70%)"></div>
+  <div class="max-w-[1100px] mx-auto relative">
+    <p class="chapter-num text-[#FF7AB8] mb-5 text-center reveal">09 / PROFONDEUR</p>
+    <h2 class="huge text-[11vw] md:text-[5.8vw] text-center reveal">Une nouvelle façon<br><span class="serif-i font-normal text-white/70">de voir le mariage.</span></h2>
+    <p class="text-center text-white/40 mt-5 reveal">La timeline n'est plus une liste. C'est un espace.</p>
+
+    <div class="depth mt-14 h-[520px] md:h-[560px] relative" id="depthWrap">
+      <div class="depth-inner absolute inset-0 flex items-center justify-center" id="depthInner">
+        <!-- back -->
+        <div class="d-card absolute w-[86%] md:w-[560px] rounded-[24px] border border-white/10 bg-white/[0.03] p-6" data-z="-180">
+          <p class="eyebrow text-white/30">Couche — Lieux</p>
+          <div class="mt-3 h-28 rounded-2xl overflow-hidden"><img src="https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=1000&auto=format&fit=crop" class="w-full h-full object-cover opacity-80" alt=""></div>
+          <p class="text-[13px] text-white/50 mt-3">Jardin → Terrasse → Grande salle · 40 m entre chaque</p>
+        </div>
+        <!-- middle -->
+        <div class="d-card absolute w-[86%] md:w-[560px] rounded-[24px] bg-ivoire text-black p-6 shadow-2xl" data-z="0">
+          <div class="flex items-center gap-3">
+            <div class="flex -space-x-2"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=100&auto=format&fit=crop" class="w-8 h-8 rounded-full border-2 border-white object-cover"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=100&auto=format&fit=crop" class="w-8 h-8 rounded-full border-2 border-white object-cover"></div>
+            <p class="text-[13px] font-bold">Cérémonie · 15:30</p><span class="ml-auto text-[11px] bg-black text-white rounded-full px-3 py-1">180 invités</span>
+          </div>
+          <div class="mt-4 h-[3px] bg-black/10 rounded-full overflow-hidden"><div class="h-full w-2/3 bg-black rounded-full"></div></div>
+          <p class="text-[12px] text-black/50 mt-3">Faites pivoter avec le doigt — chaque plan a sa profondeur.</p>
+        </div>
+        <!-- front -->
+        <div class="d-card absolute w-[70%] md:w-[420px] rounded-[20px] bg-[#111] border border-[#FF2E9A]/40 p-5" data-z="160" style="box-shadow:0 30px 80px rgba(255,46,154,.25)">
+          <p class="eyebrow text-[#FF8AC2]">✦ En ce moment</p>
+          <p class="text-[18px] font-extrabold mt-2 text-white">Le cortège avance.<br><span class="text-white/50 font-normal serif-i">Tout le monde le voit.</span></p>
+        </div>
+      </div>
+    </div>
+    <p class="text-center text-[12px] text-white/30">Bougez votre téléphone ou votre curseur — l'espace répond.</p>
+  </div>
+</section>
+
+<!-- ================= SECTION 10 ================= -->
+<section id="acces" data-chapter="10 — Évidence" class="bg-ivoire text-[#111] px-6 md:px-10 pt-24 md:pt-36 pb-10 rounded-t-[32px] md:rounded-t-[64px] relative overflow-hidden">
+  <div class="max-w-[1000px] mx-auto text-center">
+    <p class="chapter-num text-black/40 mb-6 reveal">10 / ÉVIDENCE</p>
+    <h2 class="huge text-[11.5vw] md:text-[6.2vw] leading-[.9] reveal">Et si organiser<br>un mariage devenait<br>simplement… <span class="serif-i font-normal">évident ?</span></h2>
+
+    <div id="pillZone" class="mt-10 flex flex-wrap justify-center gap-3 max-w-[700px] mx-auto">
+      <span class="key-pill opacity-0 scale-90 bg-white border pill rounded-full px-5 py-2.5 text-[14px] font-semibold">◷ Le temps, tenu</span>
+      <span class="key-pill opacity-0 scale-90 bg-white border pill rounded-full px-5 py-2.5 text-[14px] font-semibold">☺ Les bonnes personnes</span>
+      <span class="key-pill opacity-0 scale-90 bg-[#111] text-white rounded-full px-5 py-2.5 text-[14px] font-semibold">✦ Un seul geste pour tout déplacer</span>
+      <span class="key-pill opacity-0 scale-90 bg-white border pill rounded-full px-5 py-2.5 text-[14px] font-semibold">◧ Une info, partout</span>
+      <span class="key-pill opacity-0 scale-90 bg-white border pill rounded-full px-5 py-2.5 text-[14px] font-semibold">● Le jour J, déjà prêt</span>
+    </div>
+
+    <div class="mt-12 card-light rounded-[28px] p-6 md:p-10 max-w-[620px] mx-auto reveal">
+      <p class="eyebrow text-black/40">Accès anticipé — été 2027</p>
+      <h3 class="text-[24px] font-extrabold tracking-tight mt-2">Pourquoi personne n'a jamais<br>organisé un mariage comme ça ?</h3>
+      <div class="mt-6 flex flex-col sm:flex-row gap-3">
+        <input id="emailInput" type="email" placeholder="votre@email.com" class="flex-1 rounded-full border border-black/15 bg-ivoire px-6 py-4 text-[15px] outline-none focus:border-[#FF2E9A]">
+        <button id="ctaBtn" class="btn-fuchsia text-white rounded-full px-8 py-4 font-semibold text-[15px] whitespace-nowrap">Demander l'accès</button>
+      </div>
+      <p id="ctaMsg" class="text-[13px] text-black/50 mt-3 h-5"></p>
+      <div class="mt-4 flex justify-center gap-6 text-[12px] text-black/40"><span>✓ 2 400 couples en liste</span><span>✓ Sans engagement</span></div>
+    </div>
+  </div>
+
+  <footer class="max-w-[1100px] mx-auto mt-20 border-t border-black/10 pt-8 pb-6 flex flex-col md:flex-row items-center justify-between gap-4 text-[12px] text-black/45">
+    <div class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-[#FF2E9A]"></div><span class="font-extrabold tracking-[0.18em] text-black">MON MARIAGE</span><span>© 2026 — Démonstration conceptuelle</span></div>
+    <div class="flex gap-6"><a href="#temps" class="hover:text-black">Manifeste</a><a href="#" class="hover:text-black">Confidentialité</a><a href="#" class="hover:text-black">Contact</a></div>
+  </footer>
+</section>
+
+<!-- FLOATING CTA -->
+<a href="#acces" id="floatCta" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-[65] bg-white text-black rounded-full pl-5 pr-2 py-2 flex items-center gap-3 shadow-2xl border border-black/10 opacity-0 translate-y-10 transition-all duration-500">
+  <span class="text-[13px] font-semibold">Essayer la démo interactive</span>
+  <span class="bg-black text-white rounded-full w-9 h-9 flex items-center justify-center">↓</span>
+</a>
+
+<script>
+gsap.registerPlugin(ScrollTrigger);
+let lenis = null;
+try{
+  if(window.Lenis){ lenis = new Lenis({ smoothWheel:true, lerp:0.09 }); function raf(t){ lenis.raf(t); requestAnimationFrame(raf);} requestAnimationFrame(raf); lenis.on('scroll', ScrollTrigger.update); }
+}catch(e){}
+
+// ---------- SIDE DOTS ----------
+const chapters = ["hero","temps","personnes","deplacer","savoir","equipe","info","jourj","regard","vision","acces"];
+const side = document.getElementById('sideDots');
+chapters.forEach((c,i)=>{ const s=document.createElement('span'); s.dataset.target=c; side.appendChild(s); });
+const sideSpans=[...side.children];
+function setActiveSide(id){ sideSpans.forEach(s=>s.classList.toggle('active', s.dataset.target===id)); }
+
+// ---------- HERO INTRO ----------
+window.addEventListener('load', ()=>{
+  gsap.fromTo('#heroTitle',{y:60,opacity:0,scale:.96},{y:0,opacity:1,scale:1,duration:1.4,ease:'power3.out'});
+  gsap.fromTo('.hero-fade',{y:24,opacity:0},{y:0,opacity:1,duration:1,stagger:.15,delay:.4,ease:'power3.out'});
+  gsap.to('#heroTimeline',{opacity:1,duration:1,delay:.9});
+  gsap.to('#heroLineFill',{scaleX:1,duration:1.6,delay:1.1,ease:'power3.inOut'});
+  gsap.fromTo('.hero-dot',{scale:0},{scale:1,duration:.6,stagger:.25,delay:1.2,ease:'back.out(2)'});
+  gsap.to('#scrollHint',{y:20,duration:1.2,repeat:-1,yoyo:true,ease:'power1.inOut'});
+});
+
+// ---------- GENERIC REVEAL ----------
+gsap.utils.toArray('.reveal').forEach(el=>{
+  gsap.to(el,{opacity:1,y:0,duration:1,ease:'power3.out',
+    scrollTrigger:{trigger:el,start:'top 88%'}});
+});
+
+// ---------- TOP PROGRESS + NAV + FLOAT ----------
+const topProg=document.getElementById('topProgress');
+const nav=document.getElementById('nav');
+const floatCta=document.getElementById('floatCta');
+ScrollTrigger.create({start:0,end:'max',onUpdate:s=>{
+  topProg.style.width=(s.progress*100)+'%';
+  const show = s.scroll()> window.innerHeight*.7;
+  floatCta.style.opacity=show?1:0; floatCta.style.transform=show?'translate(-50%,0)':'translate(-50%,40px)';
+}});
+chapters.forEach(id=>{
+  const el=document.getElementById(id); if(!el) return;
+  ScrollTrigger.create({trigger:el,start:'top 55%',end:'bottom 55%',onToggle:s=>{if(s.isActive) setActiveSide(id)}});
+});
+
+// ---------- SECTION 1 immense timeline ----------
+const moments=[
+  {t:'11:00',l:'Préparatifs',d:'Suite nuptiale · 12 proches',img:'https://images.unsplash.com/photo-1520854221256-17451cc331bf?q=80&w=200&auto=format&fit=crop'},
+  {t:'14:00',l:'Cérémonie',d:'Jardin · 180 invités · 45 min',img:'https://images.unsplash.com/photo-1519741497674-611481863552?q=80&w=200&auto=format&fit=crop'},
+  {t:'15:30',l:'Photos dorées',d:'Allée des tilleuls · 30 min',img:'https://images.unsplash.com/photo-1522673607200-164d1b6ce486?q=80&w=200&auto=format&fit=crop'},
+  {t:'16:30',l:'Cocktail',d:'Terrasse · quartet + traiteur',img:'https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=200&auto=format&fit=crop',live:true},
+  {t:'19:00',l:'Dîner',d:'Grande salle · 22 tables',img:'https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?q=80&w=200&auto=format&fit=crop'},
+  {t:'23:00',l:'Danse',d:'Barnum · jusqu’au bout',img:'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?q=80&w=200&auto=format&fit=crop'},
+];
+const s1List=document.getElementById('s1List');
+moments.forEach((m,i)=>{
+  const row=document.createElement('div');
+  row.className='s1-row flex items-center gap-5 md:gap-8 px-5 md:px-8 py-5 md:py-6 border-b border-white/[0.07] transition-all duration-500';
+  row.innerHTML=`
+    <span class="tabular-nums font-extrabold text-[20px] md:text-[34px] tracking-tight w-[64px] md:w-[110px] ${m.live?'text-[#FF7AB8]':'text-white'}">${m.t}</span>
+    <img src="${m.img}" class="w-11 h-11 md:w-14 md:h-14 rounded-full object-cover border border-white/20" loading="lazy">
+    <div class="flex-1"><p class="font-bold text-[16px] md:text-[22px] tracking-tight leading-none">${m.l} ${m.live?'<span class="ml-2 text-[10px] align-middle bg-[#FF2E9A] text-white rounded-full px-2 py-0.5 tracking-widest">EN DIRECT</span>':''}</p><p class="text-[12px] md:text-[13px] text-white/45 mt-1">${m.d}</p></div>
+    <div class="s1-dot w-2.5 h-2.5 rounded-full ${m.live?'bg-[#FF2E9A] line-glow':'bg-white/20'}"></div>`;
+  s1List.appendChild(row);
+});
+const s1Rows=[...document.querySelectorAll('.s1-row')];
+ScrollTrigger.create({trigger:'#immenseTimeline',start:'top 70%',end:'bottom 45%',scrub:1,
+  onUpdate:s=>{
+    document.getElementById('s1Progress').style.height=(s.progress*100)+'%';
+    const idx=Math.min(s1Rows.length-1, Math.floor(s.progress*s1Rows.length));
+    s1Rows.forEach((r,i)=>{ r.style.opacity = (i===idx||i===idx+1)?1:.35; r.style.transform = i===idx?'scale(1.02) translateX(6px)':'scale(1)'; });
+  }});
+
+// ---------- SECTION 3 slider ----------
+const slider=document.getElementById('timeSlider');
+const big=document.getElementById('dragTimeBig');
+const tC=document.getElementById('tCocktail'), tD=document.getElementById('tDiner');
+const badge=document.getElementById('cascadeBadge');
+function fmt(min){ const h=Math.floor(min/60), m=min%60; return h+':'+String(m).padStart(2,'0'); }
+function updateSlider(animate=true){
+  let v=parseInt(slider.value);
+  big.textContent=fmt(v);
+  tC.textContent=fmt(v+75); tD.textContent=fmt(v+180);
+  badge.style.opacity=1; badge.style.transform='scale(1.05)';
+  clearTimeout(window._bt); window._bt=setTimeout(()=>{badge.style.opacity=0; badge.style.transform='scale(1)'},1400);
+  gsap.fromTo(big,{scale:.96},{scale:1,duration:.3,ease:'power2.out'});
+  gsap.fromTo([tC,tD],{y:6,opacity:.4},{y:0,opacity:1,duration:.4,stagger:.06});
+}
+slider.addEventListener('input',()=>updateSlider());
+document.getElementById('btnPlus').onclick=()=>{slider.value=Math.min(1020,parseInt(slider.value)+15);updateSlider();};
+document.getElementById('btnMinus').onclick=()=>{slider.value=Math.max(840,parseInt(slider.value)-15);updateSlider();};
+updateSlider(false); badge.style.opacity=0;
+
+// ---------- SECTION 4 switch ----------
+const sw=document.getElementById('focusSwitch'), fz=document.getElementById('focusZone');
+sw.onclick=()=>{ sw.classList.toggle('on'); fz.classList.toggle('focus-mode', sw.classList.contains('on')); };
+
+// ---------- SECTION 5 providers ----------
+const providers=[
+  {n:'Léa Moreau',r:'Photographe',img:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=200&auto=format&fit=crop',s:'À son poste · Jardin'},
+  {n:'Maison Aubert',r:'Traiteur · 180 couverts',img:'https://images.unsplash.com/photo-1577219491135-ce391730fb2c?q=80&w=200&auto=format&fit=crop',s:'Service 19:00 confirmé'},
+  {n:'Atelier Flora',r:'Fleurs & arche',img:'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?q=80&w=200&auto=format&fit=crop',s:'Installé à 13:12'},
+  {n:'Studio Son',r:'DJ & lumière',img:'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=200&auto=format&fit=crop',s:'Balance faite ✓'},
+  {n:'Camille D.',r:'Coordinatrice jour J',img:'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=200&auto=format&fit=crop',s:'Tout le monde la voit'},
+];
+const stack=document.getElementById('providerStack');
+providers.forEach((p,i)=>{
+  const d=document.createElement('div');
+  d.className='prov card-light rounded-[20px] p-4 flex items-center gap-4 opacity-0 translate-y-8';
+  d.innerHTML=`<img src="${p.img}" class="w-12 h-12 rounded-full object-cover border-2 border-ivoire shadow" loading="lazy">
+    <div><p class="font-extrabold text-[15px] leading-none">${p.n}</p><p class="text-[12px] text-black/50 mt-1">${p.r}</p></div>
+    <div class="ml-auto text-right"><p class="text-[12px] font-semibold flex items-center gap-1.5 justify-end"><span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>${p.s}</p><p class="text-[11px] text-black/40">synchro à l'instant</p></div>`;
+  stack.appendChild(d);
+});
+gsap.utils.toArray('.prov').forEach((el,i)=>{
+  gsap.to(el,{opacity:1,y:0,duration:.8,delay:i*.05,ease:'power3.out',scrollTrigger:{trigger:el,start:'top 90%'}});
+});
+
+// ---------- SECTION 6 propagation ----------
+let alt=false;
+document.getElementById('btnPropagate').onclick=function(){
+  alt=!alt;
+  const src=document.getElementById('srcInfo');
+  src.textContent= alt?'19:30 · Terrasse Ouest':'19:00 · Terrasse Est';
+  this.textContent= alt?'Revenir à 19:00 · Terrasse Est ↺':'Déplacer à 19:30 · Terrasse Ouest ↺';
+  const vals= alt?['Dîner → 19:30','22 tables · Ouest (plan B)','“Rendez-vous Terrasse Ouest”']:['Dîner → 19:00','22 tables · Est','“Rendez-vous Terrasse Est”'];
+  ['mir1','mir2','mir3'].forEach((id,i)=>{
+    const card=document.getElementById(id);
+    card.querySelector('.mirror-text').textContent=vals[i];
+    gsap.fromTo(card,{scale:.97,borderColor:'rgba(255,46,154,.6)'},{scale:1,borderColor:'rgba(255,255,255,.1)',duration:.7,ease:'power2.out',delay:i*.12});
+    gsap.fromTo(card,{backgroundColor:'rgba(255,46,154,.18)'},{backgroundColor:'rgba(255,255,255,0)',duration:1,delay:i*.12});
+  });
+};
+
+// ---------- LIVE CLOCK ----------
+function tick(){ const d=new Date(); const s=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0'); document.getElementById('liveClock').textContent=s; }
+setInterval(tick,10000);
+
+// ---------- SECTION 8 phone tabs ----------
+const phoneData=[
+  `<p class="text-[11px] tracking-[0.2em] uppercase text-black/40 font-bold mt-1">Aujourd'hui</p>
+   <div class="mt-2 bg-[#111] text-white rounded-2xl p-4"><p class="text-[11px] text-white/50">● 16:32 — EN COURS</p><p class="font-extrabold text-[18px] mt-1">Cocktail · Terrasse</p><div class="mt-2 h-1.5 bg-white/15 rounded-full"><div class="h-full w-[68%] bg-[#FF2E9A] rounded-full"></div></div></div>
+   <div class="mt-2 bg-white rounded-2xl p-4 border border-black/5 flex justify-between items-center"><div><p class="text-[12px] text-black/50">Ensuite · 17:45</p><p class="font-bold">Photos dorées</p></div><span>→</span></div>
+   <div class="mt-2 bg-white rounded-2xl p-4 border border-black/5 flex justify-between items-center opacity-70"><div><p class="text-[12px] text-black/50">19:00</p><p class="font-bold">Dîner · Grande salle</p></div><span>→</span></div>
+   <div class="mt-3 rounded-2xl overflow-hidden h-28"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?q=80&w=600&auto=format&fit=crop" class="w-full h-full object-cover"></div>`,
+  `<p class="text-[11px] tracking-[0.2em] uppercase text-black/40 font-bold mt-1">180 invités</p>
+   <div class="mt-2 flex gap-2"><span class="bg-black text-white text-[12px] rounded-full px-3 py-1.5">Tous</span><span class="bg-white border text-[12px] rounded-full px-3 py-1.5">Table 7</span><span class="bg-white border text-[12px] rounded-full px-3 py-1.5">VIP</span></div>
+   <div class="mt-3 flex flex-col gap-2">
+    <div class="bg-white rounded-2xl p-3 flex items-center gap-3 border"><img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=100&auto=format&fit=crop" class="w-10 h-10 rounded-full object-cover"><div><p class="font-bold text-[14px]">Inès L.</p><p class="text-[12px] text-black/50">Table 4 · arrivée ✓</p></div></div>
+    <div class="bg-white rounded-2xl p-3 flex items-center gap-3 border"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=100&auto=format&fit=crop" class="w-10 h-10 rounded-full object-cover"><div><p class="font-bold text-[14px]">Marc D.</p><p class="text-[12px] text-black/50">Table 7 · sans gluten</p></div></div>
+    <div class="bg-white rounded-2xl p-3 flex items-center gap-3 border"><img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=100&auto=format&fit=crop" class="w-10 h-10 rounded-full object-cover"><div><p class="font-bold text-[14px]">Sofia R.</p><p class="text-[12px] text-black/50">Cortège · prévenue</p></div></div>
+   </div>`,
+  `<div class="mt-2 bg-[#FF2E9A] text-white rounded-2xl p-5 text-center"><p class="text-[11px] tracking-[0.25em]">JOUR J</p><p class="text-[42px] font-extrabold tabular-nums leading-none mt-1">16:32</p><p class="text-[13px] opacity-90">Tout est déjà là.</p></div>
+   <div class="grid grid-cols-2 gap-2 mt-2"><div class="bg-white rounded-2xl p-4 border text-center"><p class="text-[22px]">☀</p><p class="font-bold text-[14px]">24°</p><p class="text-[11px] text-black/50">Parfait</p></div><div class="bg-white rounded-2xl p-4 border text-center"><p class="text-[22px]">◧</p><p class="font-bold text-[14px]">Plan live</p><p class="text-[11px] text-black/50">Ouest</p></div></div>
+   <button class="w-full mt-2 bg-black text-white rounded-full py-3.5 font-semibold text-[14px]">Lancer le cortège →</button>`
+];
+const phoneContent=document.getElementById('phoneContent');
+function setTab(i){
+  document.querySelectorAll('.tab-btn').forEach((b,j)=>{b.classList.toggle('active',i===j); b.classList.toggle('text-white/60',i!==j);});
+  gsap.to(phoneContent,{opacity:0,y:10,duration:.2,onComplete:()=>{phoneContent.innerHTML=phoneData[i]; gsap.to(phoneContent,{opacity:1,y:0,duration:.4});}});
+}
+phoneContent.innerHTML=phoneData[0];
+document.querySelectorAll('.tab-btn').forEach(b=>b.onclick=()=>setTab(parseInt(b.dataset.tab)));
+// tilt phone
+const phone=document.getElementById('phone');
+document.addEventListener('mousemove',e=>{
+  const x=(e.clientX/window.innerWidth-.5), y=(e.clientY/window.innerHeight-.5);
+  phone.style.transform=`rotateY(${x*10}deg) rotateX(${-y*8}deg)`;
+});
+
+// ---------- SECTION 9 depth ----------
+const depthInner=document.getElementById('depthInner');
+function layoutDepth(){
+  const cards=[...document.querySelectorAll('.d-card')];
+  cards.forEach(c=>{
+    const z=parseInt(c.dataset.z);
+    c.style.transform=`translateZ(${z}px)`;
+  });
+}
+layoutDepth();
+ScrollTrigger.create({trigger:'#depthWrap',start:'top 80%',end:'bottom 30%',scrub:1,
+  onUpdate:s=>{
+    const p=s.progress;
+    document.querySelectorAll('.d-card').forEach(c=>{
+      const z=parseInt(c.dataset.z);
+      const zz=z + p*220;
+      c.style.transform=`translateZ(${zz}px) rotateX(${(0.5-p)*10}deg)`;
+    });
+    depthInner.style.transform=`rotateX(${(0.5-p)*14}deg)`;
+  }});
+document.getElementById('vision').addEventListener('mousemove',e=>{
+  const r=e.currentTarget.getBoundingClientRect();
+  const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
+  depthInner.style.transform+=``;
+  depthInner.style.marginLeft=(x*20)+'px';
+});
+
+// ---------- SECTION 10 pills + CTA ----------
+gsap.utils.toArray('.key-pill').forEach((el,i)=>{
+  ScrollTrigger.create({trigger:'#pillZone',start:'top 85%',onEnter:()=>{
+    gsap.to(el,{opacity:1,scale:1,duration:.7,delay:i*.18,ease:'back.out(1.6)'});
+  }});
+});
+document.getElementById('ctaBtn').onclick=()=>{
+  const v=document.getElementById('emailInput').value;
+  const msg=document.getElementById('ctaMsg');
+  if(!v.includes('@')){ msg.textContent='Ajoutez un e-mail valide pour recevoir votre invitation.'; msg.style.color='#FF2E9A';
+    gsap.fromTo('#emailInput',{x:-6},{x:0,duration:.4,ease:'elastic.out(1,.3)'}); return; }
+  msg.textContent='✦ Bienvenue. Vous êtes n°2 401 — invitation en route.'; msg.style.color='#0a7a3d';
+  document.getElementById('ctaBtn').textContent='✓ Demande envoyée';
+  gsap.fromTo('#ctaBtn',{scale:.95},{scale:1,duration:.5,ease:'back.out(2)'});
+};
+
+// parallax hero orb
+gsap.to('#orb1',{y:120,scale:1.2,scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:1}});
+gsap.to('#heroTitle',{y:-80,scale:.94,opacity:.25,scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom 40%',scrub:1}});
+</script>
+</body>
+</html>
