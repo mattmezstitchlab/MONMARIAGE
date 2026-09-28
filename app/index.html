@@ -144,7 +144,7 @@ function showScreen(s){document.getElementById("timelineView").classList.toggle(
 
 document.getElementById("close").onclick=closeDrawer;backdrop.onclick=closeDrawer;
 document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openGeneric(b.dataset.open));
-document.querySelectorAll(".view").forEach(b=>b.onclick=()=>showScreen(b.dataset.view==="jourj"?"jourj":"timeline"));document.querySelectorAll(".mobileNav").forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));
+document.querySelectorAll(".view").forEach(b=>b.onclick=()=>{document.querySelectorAll(".view").forEach(x=>{x.classList.remove("bg-white","text-black");x.classList.add("glass","text-white")});b.classList.remove("glass","text-white");b.classList.add("bg-white","text-black");showScreen(b.dataset.view)});document.querySelectorAll(".mobileNav").forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));
 document.getElementById("addBtn").onclick=()=>{moments.push({id:Date.now(),time:17*60,label:"Nouveau moment",place:"À définir",detail:"Ajoutez les informations",people:[0]});changes++;render();toast("Moment ajouté.");};
 document.getElementById("demoBtn").onclick=()=>toast("Vous consultez un mariage de démonstration.");
 function renderNow(){const n=document.getElementById("nowCards");n.innerHTML=moments.slice(2,5).map(m=>'<div class="bg-white rounded-2xl p-5 border border-black/10"><p class="mono text-[28px] font-black">'+fmt(m.time)+'</p><p class="font-bold mt-2">'+m.label+'</p><p class="text-[12px] text-black/45 mt-1">'+m.place+'</p></div>').join("")}
