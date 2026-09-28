@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="fr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>MON MARIAGE — Radio</title>
+<style>
+:root{--bg:#09090b;--paper:#f7f7f5;--ink:#111113;--pink:#ff2e9a;--muted:#77777d;--line:#d9d9d5}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#fff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,sans-serif}button,input{font:inherit}button{cursor:pointer}
+.shell{min-height:100vh;display:grid;place-items:center;padding:22px}.radio{width:min(1180px,100%);background:linear-gradient(145deg,#202024,#0e0e10 48%,#18181b);border:1px solid #333338;border-radius:38px;padding:18px;box-shadow:0 35px 100px #000;position:relative;overflow:hidden}
+.radio:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 20% 0%,#fff1,transparent 30%),radial-gradient(circle at 90% 90%,#ff2e9a18,transparent 30%);pointer-events:none}
+.top{display:flex;align-items:center;justify-content:space-between;padding:5px 7px 15px}.brand{font-weight:900;letter-spacing:.2em;font-size:12px}.led{width:7px;height:7px;border-radius:50%;background:var(--pink);box-shadow:0 0 14px var(--pink);display:inline-block;margin-right:8px}
+.power{border:1px solid #444;border-radius:999px;background:#151517;color:#fff;padding:9px 13px;font-size:12px}.power.on{color:#ff78bd}
+.face{background:#ddd9d0;border-radius:28px;padding:18px;display:grid;grid-template-columns:1fr 330px;gap:18px;color:var(--ink);position:relative}
+.screen{background:#101012;color:#fff;border-radius:20px;padding:20px;min-height:310px;display:flex;flex-direction:column;justify-content:space-between;overflow:hidden}
+.screenHead{display:flex;justify-content:space-between;align-items:start}.mode{font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:#ff72b8}.save{font-size:10px;color:#777}.time{font-size:clamp(58px,9vw,116px);font-weight:900;letter-spacing:-.07em;line-height:.82;margin-top:15px}.title{font-size:clamp(24px,4vw,42px);font-weight:900;letter-spacing:-.05em;margin-top:15px}.sub{font-size:13px;color:#aaa;margin-top:7px}
+.tune{margin-top:24px}.freqline{position:relative;height:55px;border-top:2px solid #444}.ticks{display:flex;justify-content:space-between;position:absolute;inset:-1px 0 auto}.tick{height:12px;border-left:1px solid #777}.needle{position:absolute;top:-9px;width:2px;height:44px;background:var(--pink);box-shadow:0 0 14px #ff2e9a;transform:translateX(-1px);pointer-events:none}.needle:after{content:"";position:absolute;bottom:-5px;left:-4px;width:10px;height:10px;border-radius:50%;background:var(--pink)}
+.range{width:100%;position:absolute;left:0;top:-17px;opacity:0;cursor:ew-resize}.freqlabels{display:flex;justify-content:space-between;font:10px ui-monospace,monospace;color:#777;margin-top:5px}
+.controls{display:flex;align-items:center;gap:10px;margin-top:18px}.round{width:48px;height:48px;border-radius:50%;border:1px solid #444;background:#19191c;color:#fff}.round.big{width:62px;height:62px;background:#fff;color:#111;border:0;font-size:20px}
+.dialcol{display:flex;flex-direction:column;gap:14px}.dialbox,.speaker,.modebox{background:#c7c2b8;border-radius:20px;padding:15px;border:1px solid #aaa49a}.label{font-size:9px;text-transform:uppercase;letter-spacing:.18em;color:#5e5a53;margin-bottom:9px}.dial{width:190px;height:190px;border-radius:50%;margin:4px auto 8px;background:repeating-conic-gradient(#242427 0 2deg,transparent 2deg 10deg),radial-gradient(circle,#454549 0 45%,#151518 46% 52%,#333338 53% 70%,#111 71%);border:10px solid #aaa49a;box-shadow:inset 0 4px 15px #0008,0 5px 10px #0003;position:relative}.dial:after{content:"";position:absolute;width:5px;height:72px;left:calc(50% - 2px);top:17px;background:var(--pink);transform-origin:50% 78px;transform:rotate(-35deg);border-radius:5px}.dial input{position:absolute;inset:0;opacity:0;cursor:pointer}
+.speaker{flex:1;min-height:150px;background:#b9b4aa;position:relative;overflow:hidden}.speaker:after{content:"";position:absolute;inset:15px;background:radial-gradient(circle,#555 1.5px,transparent 1.7px);background-size:11px 11px;opacity:.8}
+.modebuttons{display:grid;grid-template-columns:repeat(3,1fr);gap:7px}.modebuttons button{min-height:44px;border:1px solid #99938a;background:#d9d5cd;border-radius:12px;font-size:11px;font-weight:800;color:#242326}.modebuttons button.active{background:#111;color:#fff;border-color:#111}.hint{font-size:10px;color:#68645d;line-height:1.35;margin-top:8px}
+.body{margin-top:12px;background:var(--paper);color:var(--ink);border-radius:20px;padding:18px;min-height:220px}.bodyhead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:12px}.body h2{font-size:25px;letter-spacing:-.04em;margin:0}.body small{color:var(--muted)}.list{display:grid;gap:7px;margin-top:12px}.row{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center;padding:12px;border:1px solid #e2e2de;border-radius:14px;background:#fff}.row.active{border-color:#ff2e9a}.rtime{font-weight:900;font-variant-numeric:tabular-nums}.rname{font-weight:800}.rsub{font-size:11px;color:#777;margin-top:2px}.mini{border:0;background:#111;color:#fff;border-radius:999px;padding:7px 10px;font-size:11px}
+.panel{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.card{border:1px solid #e2e2de;border-radius:15px;padding:14px;background:#fff}.card b{font-size:20px}.card p{font-size:12px;color:#666;margin:6px 0 0}.edit{display:grid;grid-template-columns:1fr 1fr;gap:10px}.edit label{font-size:10px;color:#777}.edit input,.edit textarea{width:100%;margin-top:5px;border:1px solid #ddd;border-radius:10px;padding:10px;background:#fff}.edit textarea{min-height:70px;resize:vertical}.wide{grid-column:1/-1}.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}.actions button{border:0;background:#111;color:#fff;border-radius:999px;padding:10px 14px;font-size:12px}.actions .danger{background:#eee;color:#c22}.toast{position:fixed;bottom:25px;left:50%;transform:translateX(-50%) translateY(15px);background:#fff;color:#111;border-radius:999px;padding:10px 16px;opacity:0;transition:.2s;box-shadow:0 12px 40px #0005;font-size:12px;font-weight:800}.toast.show{opacity:1;transform:translateX(-50%)}
+@media(max-width:800px){.face{grid-template-columns:1fr}.dialcol{display:grid;grid-template-columns:1fr 1fr}.speaker{display:none}.modebuttons{grid-column:1/-1}.panel{grid-template-columns:1fr}.edit{grid-template-columns:1fr}.radio{border-radius:25px;padding:10px}.face{padding:10px}.screen{min-height:360px}.top{padding-bottom:10px}}
+</style></head>
+<body><div class="shell"><div class="radio">
+<div class="top"><div class="brand"><span class="led"></span>MON MARIAGE · RADIO</div><button id="power" class="power on">● ENREGISTRÉ</button></div>
+<div class="face">
+<section class="screen">
+ <div><div class="screenHead"><div id="mode" class="mode">JOURNÉE</div><div id="saved" class="save">Mémoire locale</div></div><div id="clock" class="time">14:00</div><div id="title" class="title">Cérémonie</div><div id="sub" class="sub">Jardin · 180 invités · 45 min</div></div>
+ <div class="tune"><div class="freqline"><div id="ticks" class="ticks"></div><div id="needle" class="needle"></div><input id="freq" class="range" type="range" min="540" max="1435" step="5" value="840" aria-label="Fréquence horaire"></div><div class="freqlabels"><span>09:00</span><span>12:00</span><span>15:00</span><span>18:00</span><span>21:00</span><span>23:55</span></div></div>
+ <div class="controls"><button id="prev" class="round">◀</button><button id="play" class="round big">▶</button><button id="next" class="round">▶</button><span id="counter" style="font-size:11px;color:#888;margin-left:auto">2 / 6</span></div>
+</section>
+<aside class="dialcol">
+ <div class="dialbox"><div class="label">Accordeur</div><div class="dial"><input id="dial" type="range" min="540" max="1435" step="5" value="840" aria-label="Molette horaire"></div><div style="text-align:center;font-size:11px;color:#555">Tournez pour parcourir la journée</div></div>
+ <div class="speaker"><div class="label">Sortie</div></div>
+ <div class="modebox"><div class="label">Modes</div><div id="modes" class="modebuttons">
+  <button data-mode="day" class="active">JOUR</button><button data-mode="people">PERSONNES</button><button data-mode="pro">PRESTAS</button><button data-mode="info">INFOS</button><button data-mode="dayj">JOUR J</button><button data-mode="edit">ÉDITER</button>
+ </div><div class="hint">Un bouton change ce que la radio affiche. La fréquence reste toujours votre journée.</div></div>
+</aside></div>
+<div id="body" class="body"></div>
+</div></div><div id="toast" class="toast"></div>
+<script>
+const KEY="monmariage-radio-v1";
+const people=[{name:"Camille & Jules",role:"Mariés"},{name:"Léa Moreau",role:"Photographe"},{name:"Thomas",role:"Témoin"},{name:"Sofia",role:"Coordination"}];
+const providers=[{name:"Léa Moreau",role:"Photographe",moments:[2,3]},{name:"Maison Aubert",role:"Traiteur",moments:[4,5]},{name:"Atelier Flora",role:"Fleurs",moments:[2,4]},{name:"Studio Son",role:"DJ & lumière",moments:[5,6]},{name:"Sofia",role:"Coordination",moments:[1,2,4,5,6]}];
+const seed=[
+{id:1,time:660,label:"Préparatifs",place:"Suite nuptiale",detail:"12 proches · 2h",people:[0,2]},
+{id:2,time:840,label:"Cérémonie",place:"Jardin",detail:"180 invités · 45 min",people:[0,1,2]},
+{id:3,time:930,label:"Photos dorées",place:"Allée des tilleuls",detail:"30 min",people:[0,1]},
+{id:4,time:990,label:"Cocktail",place:"Terrasse",detail:"Quartet + traiteur",people:[0,1,3]},
+{id:5,time:1140,label:"Dîner",place:"Grande salle",detail:"22 tables",people:[0,3]},
+{id:6,time:1380,label:"Danse",place:"Orangerie",detail:"DJ · jusqu'au bout",people:[0,3]}];
+let state=JSON.parse(localStorage.getItem(KEY)||"null")||{moments:seed,focus:2,mode:"day",playing:false};
+const $=id=>document.getElementById(id),fmt=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
+function save(){localStorage.setItem(KEY,JSON.stringify(state));$("saved").textContent="Enregistré à "+new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"})}
+function current(){return state.moments.find(x=>x.id===state.focus)||state.moments[0]}
+function tune(t,fromDrag=true){let c=current();let old=c.time;let delta=t-old;if(!delta)return;state.moments.forEach(x=>{if(x.id===c.id||x.time>old)x.time=Math.max(540,Math.min(1435,x.time+delta))});render();save();if(fromDrag)toast("Les horaires ont suivi.");}
+function selectNearest(t){let a=state.moments.reduce((p,x)=>Math.abs(x.time-t)<Math.abs(p.time-t)?x:p,state.moments[0]);state.focus=a.id;render()}
+function render(){
+ state.moments.sort((a,b)=>a.time-b.time);let c=current();$("clock").textContent=fmt(c.time);$("title").textContent=c.label;$("sub").textContent=c.place+" · "+c.detail;$("freq").value=c.time;$("dial").value=c.time;
+ let pos=(c.time-540)/(1435-540)*100;$("needle").style.left=pos+"%";$("counter").textContent=(state.moments.indexOf(c)+1)+" / "+state.moments.length;
+ $("ticks").innerHTML=Array.from({length:18},()=>"<i class='tick'></i>").join("");
+ document.querySelectorAll("#modes button").forEach(b=>b.classList.toggle("active",b.dataset.mode===state.mode));renderBody();
+}
+function renderBody(){
+ let c=current(),b=$("body");
+ if(state.mode==="day"){b.innerHTML="<div class='bodyhead'><div><h2>La journée</h2><small>Tournez la fréquence ou choisissez un moment.</small></div><button class='mini' id='add'>+ Moment</button></div><div class='list'>"+state.moments.map(m=>"<div class='row "+(m.id===c.id?"active":"")+"'><div class='rtime'>"+fmt(m.time)+"</div><div><div class='rname'>"+m.label+"</div><div class='rsub'>"+m.place+" · "+m.detail+"</div></div><button class='mini' data-select='"+m.id+"'>Écouter</button></div>").join("")+"</div>";
+ }else if(state.mode==="people"){b.innerHTML="<div class='bodyhead'><div><h2>Personnes</h2><small>Qui est attendu, où et quand.</small></div></div><div class='panel'>"+people.map((p,i)=>{let ms=state.moments.filter(m=>m.people.includes(i));return "<div class='card'><b>"+p.name+"</b><p>"+p.role+"</p><p>"+ms.map(m=>fmt(m.time)+" · "+m.label).join("<br>")+"</p></div>"}).join("")+"</div>";
+ }else if(state.mode==="pro"){b.innerHTML="<div class='bodyhead'><div><h2>Prestataires</h2><small>Chaque équipe reliée aux bons moments.</small></div></div><div class='panel'>"+providers.map(p=>"<div class='card'><b>"+p.name+"</b><p>"+p.role+"</p><p>"+p.moments.map(id=>{let m=state.moments.find(x=>x.id===id);return m?fmt(m.time)+" · "+m.label:""}).filter(Boolean).join("<br>")+"</p></div>").join("")+"</div>";
+ }else if(state.mode==="info"){b.innerHTML="<div class='bodyhead'><div><h2>Infos</h2><small>Une information, à la bonne place.</small></div></div><div class='panel'><div class='card'><b>Château de Montreuil</b><p>12 septembre 2027 · 180 invités</p></div><div class='card'><b>Grande salle</b><p>Dîner · 22 tables</p></div><div class='card'><b>Jardin</b><p>Cérémonie · accès invités</p></div></div>";
+ }else if(state.mode==="dayj"){let upcoming=state.moments.filter(m=>m.time>=c.time).slice(0,3);b.innerHTML="<div class='bodyhead'><div><h2>Jour J</h2><small>Ce qui arrive maintenant et ensuite.</small></div><b>"+fmt(c.time)+"</b></div><div class='list'>"+upcoming.map(m=>"<div class='row "+(m.id===c.id?"active":"")+"'><div class='rtime'>"+fmt(m.time)+"</div><div><div class='rname'>"+m.label+"</div><div class='rsub'>"+m.place+" · "+m.detail+"</div></div><button class='mini' data-select='"+m.id+"'>Ouvrir</button></div>").join("")+"</div>";
+ }else{b.innerHTML="<div class='bodyhead'><div><h2>Modifier le moment</h2><small>Les changements restent dans votre radio.</small></div></div><div class='edit'><label>Nom<input id='eLabel' value='"+esc(c.label)+"'></label><label>Heure<input id='eTime' type='time' value='"+fmt(c.time)+"'></label><label>Lieu<input id='ePlace' value='"+esc(c.place)+"'></label><label>Détail<input id='eDetail' value='"+esc(c.detail)+"'></label><label class='wide'>Personnes<textarea id='ePeople'>"+c.people.map(i=>people[i].name).join(", ")+"</textarea></label></div><div class='actions'><button id='apply'>Enregistrer</button><button id='duplicate'>Dupliquer</button><button id='remove' class='danger'>Supprimer</button></div>"}
+ b.querySelectorAll("[data-select]").forEach(x=>x.onclick=()=>{state.focus=+x.dataset.select;render()});if($("add"))$("add").onclick=addMoment;if($("apply"))$("apply").onclick=applyEdit;if($("duplicate"))$("duplicate").onclick=duplicate;if($("remove"))$("remove").onclick=remove;
+}
+function esc(s){return s.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;")}
+function applyEdit(){let c=current();c.label=$("eLabel").value.trim()||"Moment";c.time=hm($("eTime").value);c.place=$("ePlace").value.trim()||"À définir";c.detail=$("eDetail").value.trim()||"";render();save();toast("Moment enregistré.")}
+function hm(v){let [h,m]=v.split(":").map(Number);return h*60+m}
+function addMoment(){let id=Date.now(),t=Math.min(1435,current().time+30);state.moments.push({id,time:t,label:"Nouveau moment",place:"À définir",detail:"",people:[0]});state.focus=id;state.mode="edit";render();save();toast("Moment ajouté.")}
+function duplicate(){let c=current(),id=Date.now();state.moments.push({...c,id,time:Math.min(1435,c.time+30),label:c.label+" — copie"});state.focus=id;render();save();toast("Moment dupliqué.")}
+function remove(){if(state.moments.length<2)return toast("Gardez au moins un moment.");let id=current().id;state.moments=state.moments.filter(x=>x.id!==id);state.focus=state.moments[0].id;state.mode="day";render();save();toast("Moment supprimé.")}
+function toast(s){let t=$("toast");t.textContent=s;t.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),1600)}
+$("freq").oninput=e=>{let t=+e.target.value;$("dial").value=t; tune(t)}
+$("dial").oninput=e=>{let t=+e.target.value;$("freq").value=t;tune(t)}
+$("prev").onclick=()=>{let i=state.moments.findIndex(x=>x.id===state.focus);state.focus=state.moments[(i-1+state.moments.length)%state.moments.length].id;render()}
+$("next").onclick=()=>{let i=state.moments.findIndex(x=>x.id===state.focus);state.focus=state.moments[(i+1)%state.moments.length].id;render()}
+$("play").onclick=()=>{state.playing=!state.playing;$("play").textContent=state.playing?"Ⅱ":"▶";if(state.playing)tick()}
+function tick(){if(!state.playing)return;let c=current(),n=c.time+5;if(n>1435){state.playing=false;$("play").textContent="▶";return}tune(n,false);setTimeout(tick,450)}
+document.querySelectorAll("#modes button").forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;render();save()});
+$("power").onclick=()=>{document.body.classList.toggle("off");let off=document.body.classList.contains("off");$("power").textContent=off?"○ ÉTEINT":"● ENREGISTRÉ";document.querySelector(".screen").style.opacity=off?".18":"1";document.querySelector(".dialcol").style.opacity=off?".35":"1"}
+render();
+</script></body></html>
