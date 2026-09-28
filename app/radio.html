@@ -44,10 +44,11 @@
 const AudioEngine=(()=>{let ctx=null,gain=null,osc=null,noise=null,noiseGain=null,lastTick=0;function init(){if(ctx)return;try{ctx=new (window.AudioContext||window.webkitAudioContext)();gain=ctx.createGain();gain.gain.value=.035;gain.connect(ctx.destination);osc=ctx.createOscillator();osc.type="sine";osc.frequency.value=440;osc.connect(gain);osc.start();const buf=ctx.createBuffer(1,ctx.sampleRate,ctx.sampleRate);const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1;noise=ctx.createBufferSource();noise.buffer=buf;noise.loop=true;noiseGain=ctx.createGain();noiseGain.gain.value=0;noise.connect(noiseGain).connect(ctx.destination);noise.start()}catch(e){ctx=null}}function scan(value){init();if(!ctx)return;ctx.resume?.();const now=ctx.currentTime;const f=220+((value-540)/(1435-540))*1180;osc.frequency.cancelScheduledValues(now);osc.frequency.linearRampToValueAtTime(f,now+.04);gain.gain.cancelScheduledValues(now);gain.gain.setTargetAtTime(.018,now,.025);gain.gain.setTargetAtTime(.002,now+.12,.08);if(value-lastTick>=5){lastTick=value;needleClick()}}function needleClick(){if(!ctx)return;const now=ctx.currentTime;const g=ctx.createGain(),o=ctx.createOscillator();o.type="square";o.frequency.value=1050;o.connect(g).connect(ctx.destination);g.gain.setValueAtTime(.025,now);g.gain.exponentialRampToValueAtTime(.001,now+.025);o.start(now);o.stop(now+.03)}function stop(){if(gain&&ctx){gain.gain.setTargetAtTime(0,ctx.currentTime,.03)}}return{scan,stop}})();
 function chooseFrenchFemaleVoice(){const voices=window.speechSynthesis?.getVoices?.()||[];return voices.find(v=>/^fr(-|_)/i.test(v.lang)&&/female|femme|amelie|audrey|julie|marie|sophie|claire|hortense|thomas|pauline/i.test(v.name))||voices.find(v=>/^fr(-|_)/i.test(v.lang))||voices.find(v=>/^fr/i.test(v.lang))||null}
 function explainMoment(m,reason=""){if(!("speechSynthesis" in window)||!m)return;window.speechSynthesis.cancel();const text=`${fmt(m.time)}. ${m.label}. ${m.place}. ${m.detail||"Aucune précision supplémentaire."}. ${reason||"Voici ce qui est prévu à ce moment de votre mariage."}`;const u=new SpeechSynthesisUtterance(text);u.lang="fr-FR";u.rate=.94;u.pitch=1.08;u.volume=.82;const v=chooseFrenchFemaleVoice();if(v)u.voice=v;window.speechSynthesis.speak(u);$("speaker").classList.add("active");clearTimeout(window.voiceTimer);window.voiceTimer=setTimeout(()=>$("speaker").classList.remove("active"),Math.max(1800,text.length*45))}
-function audioForMoment(m){
-  explainMoment(m,"La radio vient de trouver cette fréquence.");
-  toast(radioFrequency(m.time)+" FM · "+m.label);
-}
+function audioForMoment(m){ explainMoment(m,"La radio vient de trouver cette fréquence."); toast(radioFrequency(m.time)+" FM · "+m.label); }
+function radioFrequency(t){return (87.5+((t-540)/(1435-540))*20.5).toFixed(1)}
+function updateDialReadout(t){$("dialReadout").textContent=radioFrequency(t)+" FM · "+fmt(t)}
+function scanRadio(t){t=Math.max(540,Math.min(1435,Math.round(t/5)*5));AudioEngine.scan(t);$("freq").value=t;$("dial").value=t;updateDialReadout(t);const nearest=state.moments.reduce((p,x)=>Math.abs(x.time-t)<Math.abs(p.time-t)?x:p,state.moments[0]);if(Math.abs(nearest.time-t)<=7){if(scanLocked!==nearest.id){scanLocked=nearest.id;state.focus=nearest.id;render();audioForMoment(nearest)}}else{$("mode").textContent="RECHERCHE";$("clock").textContent=fmt(t);$("title").textContent="Recherche…";$("sub").textContent=radioFrequency(t)+" FM · tournez pour trouver un moment";$("counter").textContent="—";scanLocked=null}}
+let scanLocked=null;
 const KEY="monmariage-radio-v1";
 const people=[{name:"Camille & Jules",role:"Mariés"},{name:"Léa Moreau",role:"Photographe"},{name:"Thomas",role:"Témoin"},{name:"Sofia",role:"Coordination"}];
 const providers=[{id:"photo",name:"Léa Moreau",role:"Photographe",moments:[2,3]},{id:"cater",name:"Maison Aubert",role:"Traiteur",moments:[4,5]},{id:"flora",name:"Atelier Flora",role:"Fleurs",moments:[2,4]},{id:"dj",name:"Studio Son",role:"DJ & lumière",moments:[5,6]},{id:"coord",name:"Sofia",role:"Coordination",moments:[1,2,4,5,6]}];
@@ -88,14 +89,13 @@ function addMoment(){let id=Date.now(),t=Math.min(1435,current().time+30);state.
 function duplicate(){let c=current(),id=Date.now();state.moments.push({...c,id,time:Math.min(1435,c.time+30),label:c.label+" — copie"});state.focus=id;render();save();toast("Moment dupliqué.")}
 function remove(){if(state.moments.length<2)return toast("Gardez au moins un moment.");let id=current().id;state.moments=state.moments.filter(x=>x.id!==id);state.focus=state.moments[0].id;state.mode="day";render();save();toast("Moment supprimé.")}
 function toast(s){let t=$("toast");t.textContent=s;t.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),1600)}
-$("freq").oninput=e=>{let t=+e.target.value;$("dial").value=t; tune(t)}
-$("dial").oninput=e=>{let t=+e.target.value;$("freq").value=t;AudioEngine.scan(t);tune(t);let m=current();if(m.id!==lastVoiceMoment&&Math.abs(m.time-t)<=12){lastVoiceMoment=m.id;audioForMoment(m)}}
+$("freq").oninput=e=>{let t=+e.target.value;if(state.mode==="edit")tune(t);else scanRadio(t)}
+$("dial").oninput=e=>{let t=+e.target.value;if(state.mode==="edit")tune(t);else scanRadio(t)}
 $("prev").onclick=()=>{let i=state.moments.findIndex(x=>x.id===state.focus);state.focus=state.moments[(i-1+state.moments.length)%state.moments.length].id;render()}
 $("next").onclick=()=>{let i=state.moments.findIndex(x=>x.id===state.focus);state.focus=state.moments[(i+1)%state.moments.length].id;render()}
 $("play").onclick=()=>{AudioEngine.scan(current().time);state.playing=!state.playing;$("play").textContent=state.playing?"Ⅱ":"▶";$("play").setAttribute("aria-label",state.playing?"Pause":"Lire");if(state.playing)tick()}
 function tick(){if(!state.playing)return;let c=current(),n=c.time+5;if(n>1435){state.playing=false;$("play").textContent="▶";return}tune(n,false);setTimeout(tick,450)}
 document.querySelectorAll("#modes button").forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;render();save()});
 $("power").onclick=()=>{if(window.speechSynthesis)window.speechSynthesis.cancel();AudioEngine.stop();document.body.classList.toggle("off");let off=document.body.classList.contains("off");$("power").textContent=off?"○ ÉTEINT":"● ENREGISTRÉ";document.querySelector(".screen").style.opacity=off?".18":"1";document.querySelector(".dialcol").style.opacity=off?".35":"1"}
-updateDialReadout(current().time);
 render();
 </script></body></html>
