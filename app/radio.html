@@ -92,6 +92,6 @@ $("next").onclick=()=>{let i=state.moments.findIndex(x=>x.id===state.focus);stat
 $("play").onclick=()=>{AudioEngine.scan(current().time);state.playing=!state.playing;$("play").textContent=state.playing?"Ⅱ":"▶";$("play").setAttribute("aria-label",state.playing?"Pause":"Lire");if(state.playing)tick()}
 function tick(){if(!state.playing)return;let c=current(),n=c.time+5;if(n>1435){state.playing=false;$("play").textContent="▶";return}tune(n,false);setTimeout(tick,450)}
 document.querySelectorAll("#modes button").forEach(b=>b.onclick=()=>{state.mode=b.dataset.mode;render();save()});
-$("power").onclick=()=>{document.body.classList.toggle("off");let off=document.body.classList.contains("off");$("power").textContent=off?"○ ÉTEINT":"● ENREGISTRÉ";document.querySelector(".screen").style.opacity=off?".18":"1";document.querySelector(".dialcol").style.opacity=off?".35":"1"}
+$("power").onclick=()=>{if(window.speechSynthesis)window.speechSynthesis.cancel();AudioEngine.stop();document.body.classList.toggle("off");let off=document.body.classList.contains("off");$("power").textContent=off?"○ ÉTEINT":"● ENREGISTRÉ";document.querySelector(".screen").style.opacity=off?".18":"1";document.querySelector(".dialcol").style.opacity=off?".35":"1"}
 render();
 </script></body></html>
