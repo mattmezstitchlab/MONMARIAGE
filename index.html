@@ -28,20 +28,17 @@ tailwind.config = {
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
-<script src="https://unpkg.com/lenis@1.1.18/dist/lenis.min.js"></script>
+
 <style>
   *{ -webkit-tap-highlight-color: transparent; }
-  html{ background:#050506; scroll-behavior:smooth; }
+  html{ background:#050506; scroll-behavior:auto; }
   body{ background:#050506; color:#F6F1E8; font-family:"Inter Tight",sans-serif; overflow-x:hidden; -webkit-font-smoothing:antialiased; }
   ::selection{ background:#FF2E9A; color:white; }
-  .grain::after{
-    content:""; position:fixed; inset:0; z-index:90; pointer-events:none; opacity:.07;
-    background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
+  .grain::after{ display:none; }
   .huge{ font-weight:800; letter-spacing:-0.06em; line-height:.88; }
   .eyebrow{ font-size:11px; letter-spacing:.28em; text-transform:uppercase; font-weight:600; }
   .serif-i{ font-family:"Instrument Serif",serif; font-style:italic; font-weight:400; letter-spacing:-0.02em; }
-  .glass{ backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); }
+  .glass{ background-color:rgba(10,10,12,.72); }
   .line-glow{ box-shadow:0 0 20px rgba(255,46,154,.45), 0 0 60px rgba(255,46,154,.18); }
   .timeline-track{ background:linear-gradient(90deg, transparent 0%, rgba(255,255,255,.22) 10%, rgba(255,255,255,.22) 90%, transparent 100%); height:1px; }
   .dot{ width:7px; height:7px; border-radius:999px; background:#fff; box-shadow:0 0 12px rgba(255,255,255,.8); }
@@ -492,10 +489,8 @@ tailwind.config = {
 
 <script>
 gsap.registerPlugin(ScrollTrigger);
+/* Native scrolling: avoids the extra animation frame introduced by a JS smooth-scroll layer. */
 let lenis = null;
-try{
-  if(window.Lenis){ lenis = new Lenis({ smoothWheel:true, lerp:0.09 }); function raf(t){ lenis.raf(t); requestAnimationFrame(raf);} requestAnimationFrame(raf); lenis.on('scroll', ScrollTrigger.update); }
-}catch(e){}
 
 // ---------- SIDE DOTS ----------
 const chapters = ["hero","temps","personnes","deplacer","savoir","equipe","info","jourj","regard","vision","acces"];
@@ -516,8 +511,8 @@ window.addEventListener('load', ()=>{
 
 // ---------- GENERIC REVEAL ----------
 gsap.utils.toArray('.reveal').forEach(el=>{
-  gsap.to(el,{opacity:1,y:0,duration:1,ease:'power3.out',
-    scrollTrigger:{trigger:el,start:'top 88%'}});
+  gsap.to(el,{opacity:1,y:0,duration:.7,ease:'power2.out',
+    scrollTrigger:{trigger:el,start:'top 90%',once:true}});
 });
 
 // ---------- TOP PROGRESS + NAV + FLOAT ----------
@@ -555,7 +550,7 @@ moments.forEach((m,i)=>{
   s1List.appendChild(row);
 });
 const s1Rows=[...document.querySelectorAll('.s1-row')];
-ScrollTrigger.create({trigger:'#immenseTimeline',start:'top 70%',end:'bottom 45%',scrub:1,
+ScrollTrigger.create({trigger:'#immenseTimeline',start:'top 70%',end:'bottom 45%',scrub:.35,
   onUpdate:s=>{
     document.getElementById('s1Progress').style.height=(s.progress*100)+'%';
     const idx=Math.min(s1Rows.length-1, Math.floor(s.progress*s1Rows.length));
@@ -654,10 +649,12 @@ phoneContent.innerHTML=phoneData[0];
 document.querySelectorAll('.tab-btn').forEach(b=>b.onclick=()=>setTab(parseInt(b.dataset.tab)));
 // tilt phone
 const phone=document.getElementById('phone');
-document.addEventListener('mousemove',e=>{
-  const x=(e.clientX/window.innerWidth-.5), y=(e.clientY/window.innerHeight-.5);
-  phone.style.transform=`rotateY(${x*10}deg) rotateX(${-y*8}deg)`;
-});
+if (window.matchMedia("(hover:hover) and (pointer:fine)").matches) {
+  document.addEventListener('mousemove',e=>{
+    const x=(e.clientX/window.innerWidth-.5), y=(e.clientY/window.innerHeight-.5);
+    phone.style.transform=`rotateY(${x*6}deg) rotateX(${-y*5}deg)`;
+  }, {passive:true});
+}
 
 // ---------- SECTION 9 depth ----------
 const depthInner=document.getElementById('depthInner');
@@ -669,7 +666,7 @@ function layoutDepth(){
   });
 }
 layoutDepth();
-ScrollTrigger.create({trigger:'#depthWrap',start:'top 80%',end:'bottom 30%',scrub:1,
+ScrollTrigger.create({trigger:'#depthWrap',start:'top 80%',end:'bottom 30%',scrub:.35,
   onUpdate:s=>{
     const p=s.progress;
     document.querySelectorAll('.d-card').forEach(c=>{
@@ -703,8 +700,8 @@ document.getElementById('ctaBtn').onclick=()=>{
 };
 
 // parallax hero orb
-gsap.to('#orb1',{y:120,scale:1.2,scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:1}});
-gsap.to('#heroTitle',{y:-80,scale:.94,opacity:.25,scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom 40%',scrub:1}});
+gsap.to('#orb1',{y:120,scale:1.2,scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom top',scrub:.35}});
+gsap.to('#heroTitle',{y:-80,scale:.94,opacity:.25,scrollTrigger:{trigger:'#hero',start:'top top',end:'bottom 40%',scrub:.35}});
 </script>
 </body>
 </html>
