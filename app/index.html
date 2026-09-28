@@ -6,7 +6,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}html{background:#050506;color:#f6f1e8}body{margin:0;background:#050506;font-family:"Inter Tight",sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}.serif{font-family:"Instrument Serif",serif;font-style:italic}.mono{font-variant-numeric:tabular-nums}.pink{color:#ff2e9a}.glass{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1);backdrop-filter:blur(18px)}.panel{background:#f6f1e8;color:#111}.line{height:1px;background:rgba(255,255,255,.1)}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #f6f1e8}.moment{transition:.3s;border:1px solid rgba(255,255,255,.08)}.moment:hover{background:rgba(255,255,255,.055)}.moment.active{border-color:rgba(255,46,154,.7);box-shadow:0 0 0 1px rgba(255,46,154,.15),0 20px 60px rgba(255,46,154,.08)}.drawer{transform:translateX(105%);transition:transform .35s cubic-bezier(.22,1,.36,1)}.drawer.open{transform:translateX(0)}.dot{width:8px;height:8px;border-radius:50%;background:#ff2e9a;box-shadow:0 0 16px rgba(255,46,154,.7)}input[type=range]{accent-color:#ff2e9a}.toast{opacity:0;transform:translateY(10px);transition:.25s}.toast.show{opacity:1;transform:translateY(0)}@media(max-width:800px){.desktop{display:none}.drawer{width:100%}}
+*{box-sizing:border-box}html{background:#050506;color:#f6f1e8}body{margin:0;background:#050506;font-family:"Inter Tight",sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}.serif{font-family:"Instrument Serif",serif;font-style:italic}.mono{font-variant-numeric:tabular-nums}.pink{color:#ff2e9a}.glass{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1)}.panel{background:#f6f1e8;color:#111}.line{height:1px;background:rgba(255,255,255,.1)}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #f6f1e8}.moment{transition:.3s;border:1px solid rgba(255,255,255,.08)}.moment:hover{background:rgba(255,255,255,.055)}.moment.active{border-color:rgba(255,46,154,.7);box-shadow:0 0 0 1px rgba(255,46,154,.15),0 20px 60px rgba(255,46,154,.08)}.drawer{transform:translateX(105%);transition:transform .35s cubic-bezier(.22,1,.36,1)}.drawer.open{transform:translateX(0)}.dot{width:8px;height:8px;border-radius:50%;background:#ff2e9a;box-shadow:0 0 16px rgba(255,46,154,.7)}input[type=range]{accent-color:#ff2e9a}.toast{opacity:0;transform:translateY(10px);transition:.25s}.toast.show{opacity:1;transform:translateY(0)}@media(max-width:800px){.desktop{display:none}.drawer{width:100%}}
 </style>
 </head>
 <body>
@@ -31,11 +31,10 @@
     <div class="text-right"><p id="changeCount" class="text-[12px] text-white/45">Aucun changement</p><button id="addBtn" class="mt-1 text-[12px] font-semibold text-[#ff7ab8]">+ Ajouter un moment</button></div>
    </div>
    <div class="relative">
-    <div class="absolute left-[83px] md:left-[145px] top-0 bottom-0 w-px bg-white/10"></div>
     <div id="moments" class="relative p-3 md:p-5"></div>
    </div>
    <div class="px-5 md:px-8 py-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-[11px] text-white/40">
-    <span>Une donnée · plusieurs lectures</span><span id="summary">6 moments · journée structurée</span>
+    <span>Votre journée, au même endroit.</span><span id="summary">6 moments</span>
    </div>
   </div>
  </section>
@@ -47,11 +46,12 @@
   </div>
  </section>
 
- <section class="mt-6 grid md:grid-cols-3 gap-3">
-  <button class="glass rounded-[24px] p-5 text-left hover:bg-white/[.08]" data-open="people"><p class="text-[11px] uppercase tracking-[.2em] text-white/40">Personnes</p><p class="text-[25px] font-black mt-2">12 personnes</p><p class="text-[12px] text-white/45 mt-1">Les visages au bon moment.</p></button>
-  <button class="glass rounded-[24px] p-5 text-left hover:bg-white/[.08]" data-open="providers"><p class="text-[11px] uppercase tracking-[.2em] text-white/40">Prestataires</p><p class="text-[25px] font-black mt-2">6 prestataires</p><p class="text-[12px] text-white/45 mt-1">Chacun sait où il doit être.</p></button>
-  <button class="glass rounded-[24px] p-5 text-left hover:bg-white/[.08]" data-open="info"><p class="text-[11px] uppercase tracking-[.2em] text-white/40">Informations</p><p class="text-[25px] font-black mt-2">Tout au même endroit</p><p class="text-[12px] text-white/45 mt-1">Une modification se retrouve partout.</p></button>
- </section>
+ <div class="mt-5 flex flex-wrap items-center gap-2 text-[12px] text-white/55">
+  <span class="text-white/35 mr-1">Dans votre journée :</span>
+  <button class="glass rounded-full px-4 py-2 hover:bg-white/[.08]" data-open="people">12 personnes</button>
+  <button class="glass rounded-full px-4 py-2 hover:bg-white/[.08]" data-open="providers">6 prestataires</button>
+  <button class="glass rounded-full px-4 py-2 hover:bg-white/[.08]" data-open="info">Informations</button>
+ </div>
 </main>
 
 <aside id="drawer" class="drawer fixed z-50 right-0 top-0 bottom-0 w-[430px] max-w-full bg-[#f6f1e8] text-[#111] shadow-2xl p-6 overflow-auto">
@@ -83,7 +83,9 @@ function render(){
  const root=document.getElementById("moments"); root.innerHTML="";
  moments.forEach((m,i)=>{
   const el=document.createElement("button"); el.className="moment w-full text-left rounded-[20px] p-4 md:p-5 mb-3 flex items-center gap-4 md:gap-6"; el.dataset.id=m.id;
-  el.innerHTML='<div class="w-[48px] md:w-[82px] shrink-0 text-right mono font-black text-[18px] md:text-[27px]">'+fmt(m.time)+'</div><div class="w-3 h-3 rounded-full bg-white/30 shrink-0 z-10 '+(i===3?'!bg-[#ff2e9a] shadow-[0_0_18px_rgba(255,46,154,.8)]':'')+'"></div><div class="flex-1 min-w-0"><div class="flex items-center gap-3"><p class="font-extrabold text-[17px] md:text-[20px]">'+m.label+'</p><span class="text-[10px] uppercase tracking-widest text-white/35">'+(i===3?"EN DIRECT":"")+'</span></div><p class="text-[12px] text-white/45 mt-1">'+m.place+' · '+m.detail+'</p><div class="flex -space-x-2 mt-3">'+m.people.map(p=>'<img class="avatar" src="'+people[p].img+'" title="'+people[p].n+'">').join("")+'</div></div><span class="text-white/30 text-xl">›</span>';
+  el.innerHTML='<div class="w-[48px] md:w-[82px] shrink-0 text-right mono font-black text-[18px] md:text-[27px]">'+fmt(m.time)+'</div><div class="relative w-3 h-3 shrink-0 z-10 rounded-full '+(i===3?'bg-[#ff2e9a] shadow-[0_0_18px_rgba(255,46,154,.8)]':'bg-white/30')+'">
+   '+(i<moments.length-1?'<span class="absolute left-1/2 top-3 w-px h-[calc(100%+72px)] bg-white/10 -translate-x-1/2"></span>':'')+'
+  </div><div class="flex-1 min-w-0"><div class="flex items-center gap-3"><p class="font-extrabold text-[17px] md:text-[20px]">'+m.label+'</p><span class="text-[10px] uppercase tracking-widest text-white/35">'+(i===3?"EN COURS":"")+'</span></div><p class="text-[12px] text-white/45 mt-1">'+m.place+' · '+m.detail+'</p><div class="flex -space-x-2 mt-3">'+m.people.map(p=>'<img class="avatar" src="'+people[p].img+'" title="'+people[p].n+'">').join("")+'</div></div><span class="text-white/30 text-xl">›</span>';
   el.onclick=()=>openMoment(m.id); root.appendChild(el);
  });
  document.getElementById("summary").textContent=moments.length+" moments · journée structurée";
@@ -93,21 +95,21 @@ function openMoment(id){
  document.getElementById("drawerKicker").textContent=selected.label;
  document.getElementById("drawerContent").innerHTML='<h2 class="font-black text-[42px] leading-[.9] tracking-[-.04em]">'+selected.label+'</h2><p class="mono text-[32px] font-bold mt-5">'+fmt(selected.time)+'</p><p class="text-[15px] text-black/55 mt-2">'+selected.place+' · '+selected.detail+'</p><div class="mt-8 border-t border-black/10 pt-6"><p class="text-[11px] uppercase tracking-[.2em] text-black/40">Modifier l’heure</p><input id="timeEdit" type="range" min="540" max="1430" step="5" value="'+selected.time+'" class="w-full mt-5"><div class="flex justify-between mt-3"><span id="editValue" class="mono text-[24px] font-black">'+fmt(selected.time)+'</span><button id="saveTime" class="bg-black text-white rounded-full px-5 py-2.5 text-[13px] font-semibold">Appliquer</button></div></div><div class="mt-8 border-t border-black/10 pt-6"><p class="text-[11px] uppercase tracking-[.2em] text-black/40">Personnes</p><div class="mt-4 flex flex-col gap-3">'+selected.people.map(p=>'<div class="flex items-center gap-3"><img class="w-10 h-10 rounded-full object-cover" src="'+people[p].img+'"><div><p class="font-bold">'+people[p].n+'</p><p class="text-[12px] text-black/45">'+people[p].r+'</p></div></div>').join("")+'</div></div>';
  const input=document.getElementById("timeEdit"), val=document.getElementById("editValue"); input.oninput=()=>val.textContent=fmt(+input.value);
- document.getElementById("saveTime").onclick=()=>{const old=selected.time; selected.time=+input.value; changes++; document.getElementById("changeCount").textContent=changes+" modification"+(changes>1?"s":"")+" enregistrée"+(changes>1?"s":""); closeDrawer(); render(); toast(old!==selected.time?"La Timeline a été recalculée.":"Aucun changement.");};
+ document.getElementById("saveTime").onclick=()=>{const old=selected.time; selected.time=+input.value; changes++; document.getElementById("changeCount").textContent=changes+" modification"+(changes>1?"s":"")+" enregistrée"+(changes>1?"s":""); closeDrawer(); render(); toast(old!==selected.time?"Les horaires ont été mis à jour.":"Aucun changement.");};
  openDrawer();
 }
 function openDrawer(){drawer.classList.add("open");backdrop.classList.remove("hidden")}
 function closeDrawer(){drawer.classList.remove("open");backdrop.classList.add("hidden")}
 function toast(t){const x=document.getElementById("toast");x.textContent=t;x.classList.add("show");setTimeout(()=>x.classList.remove("show"),1800)}
 function openGeneric(type){
- const data={people:["Personnes","<h2 class='font-black text-[42px] leading-[.9]'>Les visages<br>au bon moment.</h2><div class='mt-8 flex flex-col gap-4'>"+people.map(p=>'<div class="flex items-center gap-3"><img class="w-12 h-12 rounded-full object-cover" src="'+p.img+'"><div><p class="font-bold">'+p.n+'</p><p class="text-[12px] text-black/45">'+p.r+'</p></div></div>').join("")+"</div>"],providers:["Prestataires","<h2 class='font-black text-[42px] leading-[.9]'>Les bonnes<br>personnes.</h2><div class='mt-8 space-y-4'>"+["Léa Moreau · Photographe","Maison Aubert · Traiteur","Atelier Flora · Fleurs","Studio Son · DJ & lumière","Camille D. · Coordination"].map((x,i)=>'<div class="p-4 bg-white rounded-2xl border border-black/10 font-bold">'+x+'<p class="text-[12px] font-normal text-black/45 mt-1">Synchronisé avec la Timeline</p></div>').join("")+"</div>"],info:["Informations","<h2 class='font-black text-[42px] leading-[.9]'>Une information.<br>Partout.</h2><p class='text-black/55 mt-5'>Les informations du mariage vivent dans une seule source. La Timeline en est une lecture, pas une copie.</p><div class='mt-8 p-5 bg-white rounded-2xl border border-black/10'><p class='text-[11px] uppercase tracking-[.2em] text-black/40'>Lieu du dîner</p><p class='font-black text-[22px] mt-2'>Grande salle · Terrasse Est</p><p class='text-[12px] text-black/45 mt-1'>Utilisé par 3 moments</p></div>"]};
+ const data={people:["Personnes","<h2 class='font-black text-[42px] leading-[.9]'>Les visages<br>au bon moment.</h2><div class='mt-8 flex flex-col gap-4'>"+people.map(p=>'<div class="flex items-center gap-3"><img class="w-12 h-12 rounded-full object-cover" src="'+p.img+'"><div><p class="font-bold">'+p.n+'</p><p class="text-[12px] text-black/45">'+p.r+'</p></div></div>').join("")+"</div>"],providers:["Prestataires","<h2 class='font-black text-[42px] leading-[.9]'>Les bonnes<br>personnes.</h2><div class='mt-8 space-y-4'>"+["Léa Moreau · Photographe","Maison Aubert · Traiteur","Atelier Flora · Fleurs","Studio Son · DJ & lumière","Camille D. · Coordination"].map((x,i)=>'<div class="p-4 bg-white rounded-2xl border border-black/10 font-bold">'+x+'<p class="text-[12px] font-normal text-black/45 mt-1">Visible au bon moment</p></div>').join("")+"</div>"],info:["Informations","<h2 class='font-black text-[42px] leading-[.9]'>Une information.<br>Partout.</h2><p class='text-black/55 mt-5'>Une information n’a pas besoin d’être répétée à plusieurs endroits.</p><div class='mt-8 p-5 bg-white rounded-2xl border border-black/10'><p class='text-[11px] uppercase tracking-[.2em] text-black/40'>Lieu du dîner</p><p class='font-black text-[22px] mt-2'>Grande salle · Terrasse Est</p><p class='text-[12px] text-black/45 mt-1'>Utilisé par 3 moments</p></div>"]};
  document.getElementById("drawerKicker").textContent=data[type][0];document.getElementById("drawerContent").innerHTML=data[type][1];openDrawer();
 }
 const drawer=document.getElementById("drawer"),backdrop=document.getElementById("backdrop");
 document.getElementById("close").onclick=closeDrawer;backdrop.onclick=closeDrawer;
 document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openGeneric(b.dataset.open));
 document.querySelectorAll(".view").forEach(b=>b.onclick=()=>{document.querySelectorAll(".view").forEach(x=>{x.classList.remove("bg-white","text-black");x.classList.add("glass","text-white")});b.classList.remove("glass","text-white");b.classList.add("bg-white","text-black");timelineView.classList.toggle("hidden",b.dataset.view!=="timeline");jourjView.classList.toggle("hidden",b.dataset.view!=="jourj");if(b.dataset.view==="jourj")renderNow()});
-document.getElementById("addBtn").onclick=()=>{moments.push({id:Date.now(),time:17*60,label:"Nouveau moment",place:"À définir",detail:"Ajoutez les informations",people:[0]});changes++;render();toast("Nouveau moment ajouté à la Timeline.");};
+document.getElementById("addBtn").onclick=()=>{moments.push({id:Date.now(),time:17*60,label:"Nouveau moment",place:"À définir",detail:"Ajoutez les informations",people:[0]});changes++;render();toast("Moment ajouté.");};
 document.getElementById("demoBtn").onclick=()=>toast("Vous consultez le mariage de démonstration.");
 function renderNow(){const n=document.getElementById("nowCards");n.innerHTML=moments.slice(2,5).map(m=>'<div class="bg-white rounded-2xl p-5 border border-black/10"><p class="mono text-[28px] font-black">'+fmt(m.time)+'</p><p class="font-bold mt-2">'+m.label+'</p><p class="text-[12px] text-black/45 mt-1">'+m.place+'</p></div>').join("")}
 setInterval(()=>document.getElementById("clock").textContent=new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}),10000);
