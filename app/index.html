@@ -6,7 +6,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}html{background:#050506;color:#ffffff}body{margin:0;background:#050506;font-family:"Inter Tight",sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}.serif{font-family:"Instrument Serif",serif;font-style:italic}.mono{font-variant-numeric:tabular-nums}.pink{color:#ff2e9a}.glass{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1)}.panel{background:#ffffff;color:#111}.line{height:1px;background:rgba(255,255,255,.1)}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #ffffff}.moment{transition:.25s;border:1px solid rgba(0,0,0,.09);color:#111} .timelineSurface{box-shadow:0 24px 80px rgba(0,0,0,.08)} .timelineSurface .moment:hover{background:#fafafa} #mainTime{height:8px;cursor:pointer} .focusChoice{min-height:42px;transition:.2s}.moment:hover{background:rgba(255,255,255,.055)}.moment.active{border-color:rgba(255,46,154,.7);box-shadow:0 0 0 1px rgba(255,46,154,.15),0 20px 60px rgba(255,46,154,.08)}.drawer{transform:translateX(105%);transition:transform .35s cubic-bezier(.22,1,.36,1)}.drawer.open{transform:translateX(0)}.dot{width:8px;height:8px;border-radius:50%;background:#ff2e9a;box-shadow:0 0 16px rgba(255,46,154,.7)}input[type=range]{accent-color:#ff2e9a}.toast{opacity:0;transform:translateY(10px);transition:.25s}.toast.show{opacity:1;transform:translateY(0)}@media(max-width:800px){.desktop{display:none}.drawer{width:100%}}
+*{box-sizing:border-box}html{background:#050506;color:#ffffff}body{margin:0;background:#050506;font-family:"Inter Tight",sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}.serif{font-family:"Instrument Serif",serif;font-style:italic}.mono{font-variant-numeric:tabular-nums}.pink{color:#ff2e9a}.glass{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1)}.panel{background:#ffffff;color:#111}.line{height:1px;background:rgba(255,255,255,.1)}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #ffffff}.moment{transition:.25s;border:1px solid rgba(0,0,0,.09);color:#111} .timelineSurface{box-shadow:0 24px 80px rgba(0,0,0,.08)} .timelineSurface .moment:hover{background:#fafafa} #mainTime{height:8px;cursor:pointer} .focusChoice{min-height:42px;transition:.2s}.moment:hover{background:rgba(255,255,255,.055)}.moment.active{border-color:rgba(255,46,154,.7);box-shadow:0 0 0 1px rgba(255,46,154,.15),0 20px 60px rgba(255,46,154,.08)}.drawer{transform:translateX(105%);transition:transform .35s cubic-bezier(.22,1,.36,1)}.drawer.open{transform:translateX(0)}.mobileNav.active{color:#fff;border-top:2px solid #ff2e9a}.dot{width:8px;height:8px;border-radius:50%;background:#ff2e9a;box-shadow:0 0 16px rgba(255,46,154,.7)}input[type=range]{accent-color:#ff2e9a}.toast{opacity:0;transform:translateY(10px);transition:.25s}.toast.show{opacity:1;transform:translateY(0)}@media(max-width:800px){.desktop{display:none}.drawer{width:100%}}
 </style>
 </head>
 <body>
@@ -21,7 +21,7 @@
 <main class="max-w-[1280px] mx-auto px-5 md:px-8 py-8 md:py-12">
  <div class="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-10">
   <div><p class="text-[11px] tracking-[.28em] uppercase text-white/40 mb-3">Mon mariage</p><h1 class="font-black tracking-[-.055em] text-[clamp(44px,7vw,92px)] leading-[.88]">Toute la journée.<br><span class="serif font-normal">Au même endroit.</span></h1></div>
-  <div class="flex gap-2"><button class="view active bg-white text-black rounded-full px-4 py-2 text-[12px]" data-view="timeline">Timeline</button><button class="view glass text-white rounded-full px-4 py-2 text-[12px]" data-view="jourj">Jour J</button></div>
+  
  </div>
 
  <section id="timelineView">
@@ -42,7 +42,7 @@
     <div id="moments" class="relative p-3 md:p-5"></div>
    </div>
    <div class="px-5 md:px-8 py-4 border-t border-white/10 flex flex-wrap items-center justify-between gap-3 text-[11px] text-white/40">
-    <span>Votre journée, au même endroit.</span><span id="summary">6 moments</span><span class="text-black/30">Visuels : Wikimedia Commons</span>
+    <span>Votre journée, au même endroit.</span><span id="summary">6 moments</span><span class="text-black/30">Données de démonstration</span>
    </div>
   </div>
  </section>
@@ -54,13 +54,14 @@
   </div>
  </section>
 
+ <section id="peopleView" class="hidden"><div class="panel rounded-[28px] p-6 md:p-10"><div class="flex items-end justify-between border-b border-black/10 pb-6"><div><p class="text-[11px] tracking-[.22em] uppercase text-black/40">Invités</p><h2 class="font-black text-[clamp(42px,7vw,78px)] leading-none mt-2">Les bonnes<br><span class="serif font-normal">personnes.</span></h2></div><span class="mono text-[14px] text-black/45">180 invités</span></div><div id="peopleList" class="grid md:grid-cols-2 gap-3 mt-6"></div></div></section>
  <div class="mt-5 flex flex-wrap items-center gap-2 text-[12px] text-white/55">
   <span class="text-white/35 mr-1">Dans votre journée :</span>
   <button class="glass rounded-full px-4 py-2 hover:bg-white/[.08]" data-open="people">12 personnes</button>
   <button class="glass rounded-full px-4 py-2 hover:bg-white/[.08]" data-open="providers">6 prestataires</button>
   <button class="glass rounded-full px-4 py-2 hover:bg-white/[.08]" data-open="info">Informations</button>
  </div>
-</main>
+<nav class="fixed bottom-0 left-0 right-0 z-40 bg-[#050506]/95 border-t border-white/10 md:hidden"><div class="grid grid-cols-3 max-w-[560px] mx-auto"><button class="mobileNav active py-3 text-[11px] font-semibold" data-screen="timeline">Timeline</button><button class="mobileNav py-3 text-[11px] text-white/45 font-semibold" data-screen="people">Invités</button><button class="mobileNav py-3 text-[11px] text-white/45 font-semibold" data-screen="jourj">Jour J</button></div></nav></main>
 
 <aside id="drawer" class="drawer fixed z-50 right-0 top-0 bottom-0 w-[430px] max-w-full bg-[#ffffff] text-[#111] shadow-2xl p-6 overflow-auto">
  <div class="flex justify-between items-center"><p id="drawerKicker" class="text-[11px] uppercase tracking-[.22em] text-black/40">Détail</p><button id="close" class="w-9 h-9 rounded-full bg-black text-white">×</button></div>
@@ -137,11 +138,15 @@ function openGeneric(type){
  document.getElementById("drawerKicker").textContent=data[type][0];document.getElementById("drawerContent").innerHTML=data[type][1];openDrawer();
 }
 const drawer=document.getElementById("drawer"),backdrop=document.getElementById("backdrop");
+function renderPeople(){const root=document.getElementById("peopleList");root.innerHTML=people.map((p,i)=>`<button class="text-left rounded-2xl border border-black/10 p-4 flex items-center gap-4 hover:bg-black/[.03]" data-person="${i}"><img class="w-14 h-14 rounded-full object-cover" src="${p.img}"><span><b class="block">${p.n}</b><small class="text-black/45">${p.r}</small></span></button>`).join("");root.querySelectorAll("[data-person]").forEach(b=>b.onclick=()=>openPerson(+b.dataset.person))}
+function openPerson(i){const p=people[i];document.getElementById("drawerKicker").textContent=p.r;document.getElementById("drawerContent").innerHTML=`<img class="w-20 h-20 rounded-full object-cover" src="${p.img}"><h2 class="font-black text-[42px] leading-[.9] mt-6">${p.n}</h2><p class="text-black/50 mt-2">${p.r}</p><div class="mt-8 border-t border-black/10 pt-6"><p class="text-[11px] uppercase tracking-[.2em] text-black/40">Dans la journée</p><div class="mt-4 space-y-3">${moments.filter(m=>m.people.includes(i)).map(m=>`<button class="w-full text-left rounded-xl bg-black/[.03] p-3" data-moment="${m.id}">${fmt(m.time)} · ${m.label}</button>`).join("")}</div></div>`;openDrawer();document.querySelectorAll("[data-moment]").forEach(b=>b.onclick=()=>{focusId=+b.dataset.moment;closeDrawer();showScreen("timeline")})}
+function showScreen(s){document.getElementById("timelineView").classList.toggle("hidden",s!=="timeline");document.getElementById("peopleView").classList.toggle("hidden",s!=="people");document.getElementById("jourjView").classList.toggle("hidden",s!=="jourj");if(s==="people")renderPeople();if(s==="jourj")renderNow();document.querySelectorAll(".mobileNav").forEach(b=>b.classList.toggle("active",b.dataset.screen===s));if(s==="timeline")render();window.scrollTo({top:0,behavior:"smooth"})}
+
 document.getElementById("close").onclick=closeDrawer;backdrop.onclick=closeDrawer;
 document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>openGeneric(b.dataset.open));
-document.querySelectorAll(".view").forEach(b=>b.onclick=()=>{document.querySelectorAll(".view").forEach(x=>{x.classList.remove("bg-white","text-black");x.classList.add("glass","text-white")});b.classList.remove("glass","text-white");b.classList.add("bg-white","text-black");timelineView.classList.toggle("hidden",b.dataset.view!=="timeline");jourjView.classList.toggle("hidden",b.dataset.view!=="jourj");if(b.dataset.view==="jourj")renderNow()});
+document.querySelectorAll(".view").forEach(b=>b.onclick=()=>showScreen(b.dataset.view==="jourj"?"jourj":"timeline"));document.querySelectorAll(".mobileNav").forEach(b=>b.onclick=()=>showScreen(b.dataset.screen));
 document.getElementById("addBtn").onclick=()=>{moments.push({id:Date.now(),time:17*60,label:"Nouveau moment",place:"À définir",detail:"Ajoutez les informations",people:[0]});changes++;render();toast("Moment ajouté.");};
-document.getElementById("demoBtn").onclick=()=>toast("Vous consultez le mariage de démonstration.");
+document.getElementById("demoBtn").onclick=()=>toast("Vous consultez un mariage de démonstration.");
 function renderNow(){const n=document.getElementById("nowCards");n.innerHTML=moments.slice(2,5).map(m=>'<div class="bg-white rounded-2xl p-5 border border-black/10"><p class="mono text-[28px] font-black">'+fmt(m.time)+'</p><p class="font-bold mt-2">'+m.label+'</p><p class="text-[12px] text-black/45 mt-1">'+m.place+'</p></div>').join("")}
 setInterval(()=>document.getElementById("clock").textContent=new Date().toLocaleTimeString("fr-FR",{hour:"2-digit",minute:"2-digit"}),10000);
 render();
