@@ -6,7 +6,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800;900&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
-*{box-sizing:border-box}html{background:#050506;color:#f6f1e8}body{margin:0;background:#050506;font-family:"Inter Tight",sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}.serif{font-family:"Instrument Serif",serif;font-style:italic}.mono{font-variant-numeric:tabular-nums}.pink{color:#ff2e9a}.glass{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1)}.panel{background:#f6f1e8;color:#111}.line{height:1px;background:rgba(255,255,255,.1)}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #f6f1e8}.moment{transition:.3s;border:1px solid rgba(255,255,255,.08)}.moment:hover{background:rgba(255,255,255,.055)}.moment.active{border-color:rgba(255,46,154,.7);box-shadow:0 0 0 1px rgba(255,46,154,.15),0 20px 60px rgba(255,46,154,.08)}.drawer{transform:translateX(105%);transition:transform .35s cubic-bezier(.22,1,.36,1)}.drawer.open{transform:translateX(0)}.dot{width:8px;height:8px;border-radius:50%;background:#ff2e9a;box-shadow:0 0 16px rgba(255,46,154,.7)}input[type=range]{accent-color:#ff2e9a}.toast{opacity:0;transform:translateY(10px);transition:.25s}.toast.show{opacity:1;transform:translateY(0)}@media(max-width:800px){.desktop{display:none}.drawer{width:100%}}
+*{box-sizing:border-box}html{background:#050506;color:#f6f1e8}body{margin:0;background:#050506;font-family:"Inter Tight",sans-serif;-webkit-font-smoothing:antialiased}button,input{font:inherit}button{cursor:pointer}.serif{font-family:"Instrument Serif",serif;font-style:italic}.mono{font-variant-numeric:tabular-nums}.pink{color:#ff2e9a}.glass{background:rgba(255,255,255,.055);border:1px solid rgba(255,255,255,.1)}.panel{background:#f6f1e8;color:#111}.line{height:1px;background:rgba(255,255,255,.1)}.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid #f6f1e8}.moment{transition:.25s;border:1px solid rgba(255,255,255,.08)} #mainTime{height:8px;cursor:pointer} .focusChoice{min-height:42px;transition:.2s}.moment:hover{background:rgba(255,255,255,.055)}.moment.active{border-color:rgba(255,46,154,.7);box-shadow:0 0 0 1px rgba(255,46,154,.15),0 20px 60px rgba(255,46,154,.08)}.drawer{transform:translateX(105%);transition:transform .35s cubic-bezier(.22,1,.36,1)}.drawer.open{transform:translateX(0)}.dot{width:8px;height:8px;border-radius:50%;background:#ff2e9a;box-shadow:0 0 16px rgba(255,46,154,.7)}input[type=range]{accent-color:#ff2e9a}.toast{opacity:0;transform:translateY(10px);transition:.25s}.toast.show{opacity:1;transform:translateY(0)}@media(max-width:800px){.desktop{display:none}.drawer{width:100%}}
 </style>
 </head>
 <body>
@@ -25,6 +25,14 @@
  </div>
 
  <section id="timelineView">
+  <div class="glass rounded-[28px] p-5 md:p-8 mb-5">
+   <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+    <div><p class="text-[11px] uppercase tracking-[.2em] text-white/40">Essayez ici</p><h2 class="font-black text-[clamp(26px,4vw,44px)] tracking-[-.04em] mt-2">Changez une heure.<br><span class="serif font-normal">La journée suit.</span></h2><p class="text-[13px] text-white/45 mt-3 max-w-[480px]">Choisissez un moment, puis faites glisser l’heure. Les horaires qui viennent après s’ajustent avec lui.</p></div>
+    <div class="text-left md:text-right shrink-0"><p id="focusLabel" class="text-[11px] uppercase tracking-[.18em] text-white/40">Cérémonie</p><p id="bigTime" class="mono font-black text-[clamp(64px,10vw,112px)] leading-[.8] tracking-[-.06em] mt-3">14:00</p></div>
+   </div>
+   <div class="mt-8"><input id="mainTime" aria-label="Déplacer l'heure du moment sélectionné" type="range" min="540" max="1380" step="5" value="840" class="w-full h-2"><div class="flex justify-between mt-3 text-[11px] text-white/35 mono"><span>09:00</span><span>12:00</span><span>15:00</span><span>18:00</span><span>21:00</span><span>23:00</span></div></div>
+   <div class="flex flex-wrap items-center justify-between gap-3 mt-6"><div id="focusChoices" class="flex flex-wrap gap-2"></div><button id="resetTime" type="button" class="text-[12px] text-white/45 hover:text-white">Réinitialiser</button></div>
+  </div>
   <div class="glass rounded-[28px] overflow-hidden">
    <div class="px-5 md:px-8 py-5 flex items-center justify-between border-b border-white/10">
     <div><p class="text-[11px] uppercase tracking-[.2em] text-white/40">Samedi 12 septembre 2027</p><p class="text-[18px] font-bold mt-1">La journée</p></div>
@@ -76,7 +84,7 @@ let moments=[
  {id:5,time:19*60,label:"Dîner",place:"Grande salle",detail:"22 tables",people:[0,3]},
  {id:6,time:23*60,label:"Danse",place:"Orangerie",detail:"DJ · jusqu'au bout",people:[0,3]}
 ];
-let changes=0, selected=null;
+let changes=0, selected=null, focusId=2;
 const fmt=m=>String(Math.floor(m/60)).padStart(2,"0")+":"+String(m%60).padStart(2,"0");
 function render(){
  moments.sort((a,b)=>a.time-b.time);
@@ -89,13 +97,36 @@ function render(){
   el.onclick=()=>openMoment(m.id); root.appendChild(el);
  });
  document.getElementById("summary").textContent=moments.length+" moments · journée structurée";
+ const focus=moments.find(x=>x.id===focusId)||moments[0];
+ if(focus){
+  document.getElementById("focusLabel").textContent=focus.label;
+  document.getElementById("bigTime").textContent=fmt(focus.time);
+  document.getElementById("mainTime").value=focus.time;
+  document.getElementById("focusChoices").innerHTML=moments.map(x=>'<button type="button" class="focusChoice '+(x.id===focus.id?'bg-white text-black':'glass text-white')+' rounded-full px-3 py-2 text-[12px]" data-focus="'+x.id+'">'+x.label+'</button>').join("");
+  document.querySelectorAll(".focusChoice").forEach(b=>b.onclick=()=>{focusId=+b.dataset.focus; render();});
+ }
 }
+function moveFocusTime(nextTime){
+ const focus=moments.find(x=>x.id===focusId); if(!focus)return;
+ const old=focus.time; const delta=nextTime-old; if(delta===0)return;
+ moments.forEach(x=>{if(x.id===focusId || x.time>old) x.time=Math.max(0,Math.min(1439,x.time+delta));});
+ changes++;
+ document.getElementById("changeCount").textContent=changes+" modification"+(changes>1?"s":"")+" enregistrée"+(changes>1?"s":"");
+ render(); toast("Les horaires ont suivi.");
+}
+document.getElementById("mainTime").oninput=e=>moveFocusTime(+e.target.value);
+document.getElementById("resetTime").onclick=()=>{
+ const focus=moments.find(x=>x.id===focusId); if(!focus)return;
+ const defaults={1:660,2:840,3:930,4:990,5:1140,6:1380};
+ const target=defaults[focus.id]; if(target==null)return;
+ const old=focus.time; const delta=target-old; if(delta===0)return;
+ moments.forEach(x=>{if(x.id===focusId || x.time>old) x.time=Math.max(0,Math.min(1439,x.time+delta));});
+ render(); toast("Horaire réinitialisé.");
+};
 function openMoment(id){
  selected=moments.find(x=>x.id===id); if(!selected)return;
  document.getElementById("drawerKicker").textContent=selected.label;
- document.getElementById("drawerContent").innerHTML='<h2 class="font-black text-[42px] leading-[.9] tracking-[-.04em]">'+selected.label+'</h2><p class="mono text-[32px] font-bold mt-5">'+fmt(selected.time)+'</p><p class="text-[15px] text-black/55 mt-2">'+selected.place+' · '+selected.detail+'</p><div class="mt-8 border-t border-black/10 pt-6"><p class="text-[11px] uppercase tracking-[.2em] text-black/40">Modifier l’heure</p><input id="timeEdit" type="range" min="540" max="1430" step="5" value="'+selected.time+'" class="w-full mt-5"><div class="flex justify-between mt-3"><span id="editValue" class="mono text-[24px] font-black">'+fmt(selected.time)+'</span><button id="saveTime" class="bg-black text-white rounded-full px-5 py-2.5 text-[13px] font-semibold">Appliquer</button></div></div><div class="mt-8 border-t border-black/10 pt-6"><p class="text-[11px] uppercase tracking-[.2em] text-black/40">Personnes</p><div class="mt-4 flex flex-col gap-3">'+selected.people.map(p=>'<div class="flex items-center gap-3"><img class="w-10 h-10 rounded-full object-cover" src="'+people[p].img+'"><div><p class="font-bold">'+people[p].n+'</p><p class="text-[12px] text-black/45">'+people[p].r+'</p></div></div>').join("")+'</div></div>';
- const input=document.getElementById("timeEdit"), val=document.getElementById("editValue"); input.oninput=()=>val.textContent=fmt(+input.value);
- document.getElementById("saveTime").onclick=()=>{const old=selected.time; selected.time=+input.value; changes++; document.getElementById("changeCount").textContent=changes+" modification"+(changes>1?"s":"")+" enregistrée"+(changes>1?"s":""); closeDrawer(); render(); toast(old!==selected.time?"Les horaires ont été mis à jour.":"Aucun changement.");};
+ document.getElementById("drawerContent").innerHTML='<h2 class="font-black text-[42px] leading-[.9] tracking-[-.04em]">'+selected.label+'</h2><p class="mono text-[32px] font-bold mt-5">'+fmt(selected.time)+'</p><p class="text-[15px] text-black/55 mt-2">'+selected.place+' · '+selected.detail+'</p><div class="mt-8 border-t border-black/10 pt-6"><p class="text-[11px] uppercase tracking-[.2em] text-black/40">Ce moment</p><p class="text-black/55 mt-3">Déplacez son heure directement dans le grand curseur au-dessus de la journée.</p></div><div class="mt-8 border-t border-black/10 pt-6"><p class="text-[11px] uppercase tracking-[.2em] text-black/40">Personnes</p><div class="mt-4 flex flex-col gap-3">'+selected.people.map(p=>'<div class="flex items-center gap-3"><img class="w-10 h-10 rounded-full object-cover" src="'+people[p].img+'"><div><p class="font-bold">'+people[p].n+'</p><p class="text-[12px] text-black/45">'+people[p].r+'</p></div></div>').join("")+'</div></div>';
  openDrawer();
 }
 function openDrawer(){drawer.classList.add("open");backdrop.classList.remove("hidden")}
